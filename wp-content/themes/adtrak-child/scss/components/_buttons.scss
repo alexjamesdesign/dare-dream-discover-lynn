@@ -1,0 +1,36 @@
+/*---------------------------------------------------------------
+    Buttons
+--------------------------------------------------------------- */
+
+button, .btn, #nf-field-8 {
+    display: inline-block;
+    padding: 15px 20px;
+    color: $blanc;
+    text-decoration: none; 
+    text-transform: uppercase;
+    transition: .3s;
+
+    background: $pink;
+    border-radius: 12px 12px 12px 0px;
+    
+    &:hover {
+        background: $noir;
+        color: $blanc;
+        border-color: $blanc;
+        text-decoration: none;
+    }
+
+    // Define the 1) button name, 2) text/border color & 3) background color
+    $btnColors :        noir $noir $blanc,
+                        pink $blanc $pink,
+                        blanc $blanc $noir;
+
+    // Loop through colours above and create classes
+    @each $colorOption in $btnColors {
+        &--#{nth($colorOption, 1)} {
+            color: nth($colorOption,2);
+            border-color: nth($colorOption,2);
+            background-color: nth($colorOption,3);
+        }
+    }
+}

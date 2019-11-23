@@ -1,0 +1,93 @@
+/*---------------------------------------------------------------
+    Header
+--------------------------------------------------------------- */
+
+
+header {
+
+    &:before {
+        /* Pseudo element to push content down */
+        content: '';
+       	height: $mobile-top-bar-height;
+        display: block;
+        
+        @include bp800 {
+            display: none;
+        }
+    }
+
+    .header--container {
+        @include bp800 {
+            display: flex;
+            align-content: space-between;
+            padding: 30px 40px 0px 40px;
+        }
+    }
+
+    .search {
+        z-index: 3;
+    }
+
+    .search-form {
+        display: flex;
+        justify-content: center;
+        z-index: 2;
+
+        @include bp800 {
+            justify-content: initial;
+        }
+
+        .search-field {
+            
+        }
+
+        input {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            background: $lightblue;
+            color: $darkblue;
+            -webkit-appearance: none;
+            @include font-din-700;
+            text-transform: uppercase;
+        }
+
+        input[type="submit"] {
+            color: $darkblue;
+            @include font-din-700;
+            text-transform: uppercase;
+        }
+
+        .screen-reader-text {
+            display: none;
+        }
+    }
+}
+
+.logo {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    transition: .3s;
+    margin: 0 auto;
+    padding: 10px 5px;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    @include bp800 {
+        float: left;
+    }
+}
+
+.phone-top-right {
+    display: none;
+
+    @include bp800 {
+        float: right;
+        display: block;
+        padding: 20px;
+    }
+}

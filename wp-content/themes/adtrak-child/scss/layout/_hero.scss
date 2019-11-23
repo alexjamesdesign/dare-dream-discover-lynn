@@ -1,0 +1,74 @@
+/*---------------------------------------------------------------
+    Hero
+--------------------------------------------------------------- */
+
+.hero {
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+
+    &__container {
+        position: relative;   
+        
+        @include bp800 {
+            display: flex;
+            min-height: 400px; 
+        }
+    }
+
+    &__content {
+        color: $darkblue;
+
+        @include bp800 {
+            @include font-anton-400;
+            z-index: 2;
+            width: 50%;
+            max-width: 690px;
+            text-align: left;
+            padding: 50px 0px 0px 40px;
+        }
+    }
+
+    &__primary  {
+        font-weight: 400;
+        font-style: normal;
+        font-size: 30px;
+        @include font-anton-400;
+
+        @include bp800 {
+            font-size: 64px;
+            line-height: 85px;
+        }
+    }
+
+    &__image {
+        z-index: 1;
+        background-size: 100%;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+
+        @include bp800 {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 70%;
+            min-height: 700px;
+            margin: 0;
+        }
+
+        @include bp1000 {
+            width: 50%;
+        }
+
+        img {
+            min-height: auto;
+            width: 100%;
+
+            @include bp800 {
+                min-height: 700px;
+            }
+        }
+    }
+    
+}

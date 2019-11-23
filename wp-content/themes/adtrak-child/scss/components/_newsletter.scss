@@ -1,0 +1,83 @@
+
+/* Newsletter
+--------------------------------------------------------------- */
+.newsletter {
+    background: $lightblue;
+    padding: 20px 0px;
+}
+
+.container--newsletter { 
+
+    .title--newsletter {
+        color: $noir;
+        padding: 0px 0px 20px 0px;
+    }
+
+    .nf-form-2-cont {
+        width: 100%;
+    }
+
+    nf-fields-wrap {
+        display: flex;
+        flex-wrap: wrap;
+
+        @include bp800 {
+            flex-wrap: nowrap;
+        }
+    }
+
+    nf-field {
+        width: 100%;
+
+        @include bp800 {
+            width: 25%;
+        }
+
+        .nf-field-label {
+            display: none;
+        }
+
+        div {
+            width: 100%;
+        }
+
+        .nf-field-container {
+            width: 100%;
+        }
+    }
+
+    #nf-field-8-container {
+        nf-field {
+            width: 100%;
+        }
+    }
+
+    .nf-field-element {
+        padding: 0px 15px 0px 0px;
+
+        input[type=button] {
+            width: 100%;
+        }
+    }
+
+    input {
+        padding: 1.5rem;
+        margin-right: 1rem;
+        border: none;
+        background: #F0F0F0;
+        color: $windowsblue;
+        -webkit-appearance: none;
+        @include font-din-700;
+        text-transform: uppercase;
+
+        &::placeholder {
+            color: $windowsblue;
+        }
+    }
+
+    input[type="submit"] {
+        color: $darkblue;
+        @include font-din-700;
+        text-transform: uppercase;
+    }
+}
