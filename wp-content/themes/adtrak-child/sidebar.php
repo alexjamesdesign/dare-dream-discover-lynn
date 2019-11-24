@@ -32,11 +32,20 @@ if (is_home() || is_singular('destinations') || is_month() || is_category() || i
 
 	<div class="sidebar-item sidebar-item__news-block">
 		<p class="title">Categories</p>
-		<ul>
-		    <?php wp_list_categories( array(
-		        'title_li' => ''
-		    ) ); ?>
-		</ul>
+		
+		<?php
+		$terms = get_terms( 'destination-categories', array(
+			'hide_empty' => true,
+		));
+
+		?>
+
+		<?php foreach( $terms as $term ) : ?>
+
+		<a class="" href="<?php echo site_url(); ?>/destinations/<?php echo $term->slug;?>"><?php echo $term->name;?></a>
+
+		<?php endforeach; ?>
+
 	</div>
 
 <?php else: ?>

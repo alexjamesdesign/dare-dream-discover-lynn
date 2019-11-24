@@ -25,12 +25,12 @@
                 if ( $image ) : ?>
 
                     <style>
-                        .post-<?php echo $i; ?> {
+                        .destination-<?php echo $i; ?> {
                         background-image: url(<?php echo esc_url($medImage); ?>);
                         background-color: red;
                         }
                         @media (min-width: 600px) {
-                            .post-<?php echo $i; ?> {
+                            .destination-<?php echo $i; ?> {
                             background-image: url(<?php echo esc_url($medImage); ?>);
                             }
                         }
@@ -38,7 +38,7 @@
 
                 <?php endif; ?>
 
-                <a class="post-i post-<?php echo $i; ?>" href="<?php echo $term->slug;?>">
+                <a class="destination-i destination-<?php echo $i; ?>" href="<?php echo $term->slug;?>">
                         
                     <p class="destination-name"><?php echo $term->name;?></p>
                     
@@ -49,7 +49,7 @@
                         endif;
                     ?>
                     
-                    </a>
+                </a>
 
                 <?php wp_reset_query(); ?>
 

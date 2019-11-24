@@ -16,7 +16,7 @@
 
     @include bp800 {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
 }
 
@@ -31,6 +31,9 @@
     padding: 60px 20px 150px 20px;
 }
 
+.destination-i-container {
+    
+}
 
 .destination-i {
     padding: 20px;
@@ -47,13 +50,15 @@
 
     &:nth-of-type(odd) {
         @include bp800 {
-            margin: 20px 40px 0px 0px;
+            margin: 60px 0px 0px 0px;
+            border-right: 30px solid #fff;
         }
     }
 
     &:nth-of-type(even) {
         @include bp800 {
-            margin: 20px 0px 0px 40px;
+            margin: 60px 0px 0px 0px;
+            border-left: 30px solid #fff;
         }
     }
 
@@ -62,6 +67,7 @@
         float: left;
         max-width: none;
     }
+    
 } 
 
 .destination-name {
