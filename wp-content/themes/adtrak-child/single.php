@@ -9,18 +9,25 @@
 ?>
 
 <?php
-    get_header();
-    include locate_template('parts/hero.php');
+	get_header();
+	
+	$category = get_the_category();
+	$firstCategory = $category[0]->cat_name; echo $firstCategory;
 ?>
 
-	<main class="site-content">
-		<div class="container">
+	<main class="site-content site-content--single">
+		<div class="container site-content--single">
+			<div class="site-content__into">
+				<?php echo $firstCategory;?>
+			</div>
+		</div>
+		<div class="container site-content__container">
 			<article class="copy">				
 				<?php the_title('<h1>', '</h1>'); ?>
 				<?php the_content(); ?>
 			</article>
 
-			<aside class="sidebar">
+			<aside class="sidebar site-content__sidebar">
 				<?php get_sidebar(); ?>			
 			</aside>
 		</div>

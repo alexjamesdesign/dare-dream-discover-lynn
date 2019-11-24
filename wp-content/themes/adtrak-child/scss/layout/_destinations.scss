@@ -6,7 +6,72 @@
 
 }
 
-.destinations {
+.destinations-section {
     padding: 20px;
     @include clearfix;
 } 
+
+.destinations-section {
+    display: block;
+
+    @include bp800 {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+}
+
+.destinations__wrapper {
+    background: $blanc;
+    overflow: auto;
+    width: 100%;
+}
+
+.destinations__container {
+    overflow: auto;
+    padding: 60px 20px 150px 20px;
+}
+
+
+.destination-i {
+    padding: 20px;
+    min-height: 400px;
+    color: $noir;
+    @include clearfix;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    border-radius: 0px 10px 10px 10px;
+    margin: 40px auto 80px auto;
+    max-width: 600px;
+
+    &:nth-of-type(odd) {
+        @include bp800 {
+            margin: 20px 40px 0px 0px;
+        }
+    }
+
+    &:nth-of-type(even) {
+        @include bp800 {
+            margin: 20px 0px 0px 40px;
+        }
+    }
+
+    @include bp800 {
+        width: 50%;
+        float: left;
+        max-width: none;
+    }
+} 
+
+.destination-name {
+    background: $babyblue;
+    @include font-anton-400;
+    font-size: 2.5rem;
+    padding: 15px 25px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50px;
+    left: 0;
+}

@@ -1,18 +1,63 @@
-<div class="destinations">
+<div class="wrapper destinations__wrapper">
 
-<p class="title">My Adventures</p>
+    <div class="container destinations__container">
+
+        <p class="title">Destinations</p>
+
+        <div class="destinations-section">
+
+            <?php
+            $terms = get_terms( 'destination-categories', array(
+                'hide_empty' => true,
+            ));
+
+            ?>
+
+            <?php $i = 0; foreach( $terms as $term ) : $i++ ?>
+
+            <?php
+
+                /* This uses the featured image as a background. Takes the featured image, and applies the different sizes to varying breakpoints. */
+
+                $image = get_field('cat-image', $term->taxonomy . '_' . $term->term_id );
+                $medImage = $image['sizes'][ 'medium' ];
+
+                if ( $image ) : ?>
+
+                    <style>
+                        .post-<?php echo $i; ?> {
+                        background-image: url(<?php echo esc_url($medImage); ?>);
+                        background-color: red;
+                        }
+                        @media (min-width: 600px) {
+                            .post-<?php echo $i; ?> {
+                            background-image: url(<?php echo esc_url($medImage); ?>);
+                            }
+                        }
+                    </style>
+
+                <?php endif; ?>
+
+                <a class="post-i post-<?php echo $i; ?>" href="<?php echo $term->slug;?>">
+                        
+                    <p class="destination-name"><?php echo $term->name;?></p>
+                    
+                    <?php 
+                        $ld_location = get_field('location');
+                        if($ld_location) :
+                            do_action('ld_single', $ld_location); 	
+                        endif;
+                    ?>
+                    
+                    </a>
+
+                <?php wp_reset_query(); ?>
 
 
-<?php $terms = get_terms( 'destination-categories', array(
-    'hide_empty' => true,
-)
-);
-?>
+            <?php endforeach; ?>
 
-<?php foreach( $terms as $term ) : ?>
-    <div class="destination">
-        <a href="<?php echo $term->slug;?>"><?php echo $term->name;?></a>
+        </div>
+            
     </div>
-<?php endforeach; ?>
 
 </div>

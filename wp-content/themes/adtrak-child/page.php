@@ -9,27 +9,12 @@
 
 <?php
     get_header();
-    include locate_template('parts/hero.php');
     include locate_template('parts/buckets.php');
 ?>
+	<div class="top-bg"></div>
 
-	<main class="site-content">
-		<div class="container">
-			<?php if (have_posts()): while (have_posts()): the_post(); ?>
-
-				<article class="copy">
-					<h1><?php the_field('h1'); ?></h1>
-					<?php the_content(); ?>
-				</article>
-
-                <?php echo do_shortcode("[ninja_form id=1]"); ?>
-
-				<aside class="sidebar">
-					<?php get_sidebar(); ?>
-				</aside>
-
-			<?php endwhile; endif; ?>
-		</div>
-	</main>
+	<?php include locate_template('parts/destinations.php'); ?>
+	
+	<?php include locate_template('parts/about.php'); ?>
 
 <?php get_footer(); ?>

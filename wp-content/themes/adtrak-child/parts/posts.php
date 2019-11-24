@@ -18,6 +18,7 @@
                 'orderby'               => 'title',
                 'paged'          		=> $paged,
             );
+
             $the_query = new WP_Query($query_args);
                 if ($the_query->have_posts()):
                 while ($the_query->have_posts()): $the_query->the_post();
@@ -28,6 +29,7 @@
             <?php
 
             /* This uses the featured image as a background. Takes the featured image, and applies the different sizes to varying breakpoints. */
+
 
             $thumb_id = get_post_thumbnail_id();
 
@@ -54,7 +56,7 @@
 
             <a class="post-i post-<?php echo $i; ?>" href="<?php the_permalink(); ?>">
                     
-                <p class="destination-name"><?php the_field('country', option); ?></p>
+                <p class="destination-name"><?php echo strip_tags ( get_the_term_list( get_the_ID(), 'destination-categories', "",", " )); ?></p>
 
                 <div class="post-name" href="<?php the_permalink(); ?>"><?php the_title(); ?></div>
                 

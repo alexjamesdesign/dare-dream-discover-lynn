@@ -191,7 +191,7 @@ function destinations_post_type() {
 		'singular_name'         => _x( 'Destination', 'Post Type Singular Name', 'text_domain' ),
 		'menu_name'             => __( 'Destinations', 'text_domain' ),
 		'name_admin_bar'        => __( 'Destinations', 'text_domain' ),
-		'archives'              => __( 'Item Archives', 'text_domain' ),
+		'archives'              => __( 'Destinations', 'text_domain' ),
 		'attributes'            => __( 'Item Attributes', 'text_domain' ),
 		'parent_item_colon'     => __( 'Parent Item:', 'text_domain' ),
 		'all_items'             => __( 'All Items', 'text_domain' ),
@@ -214,6 +214,12 @@ function destinations_post_type() {
 		'items_list'            => __( 'Items list', 'text_domain' ),
 		'items_list_navigation' => __( 'Items list navigation', 'text_domain' ),
 		'filter_items_list'     => __( 'Filter items list', 'text_domain' ),
+	);
+	$rewrite = array(
+		'slug'                => 'destinations/%year%',
+		'with_front' => true,
+		'pages' => true,
+		'feeds' => true,
 	);
 	$args = array(
 		'label'                 => __( 'Destinations', 'text_domain' ),

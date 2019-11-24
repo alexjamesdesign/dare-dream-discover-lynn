@@ -20,17 +20,77 @@
     Sidebar - News Page
 --------------------------------------------------------------- */
 
-$headingColour : $noir;
+$headingColour : $pink;
 $listBg : #ccc;
 $linkColor : $noir;
 $linkBg : lighten(#ccc,5);
 
-.news-block {
+.sidebar-item {
+    background: $lightblue;
+	border-radius: 15px;
 	margin-bottom: 15px;
 	padding: 20px;
 	text-align: center;
 	list-style: none;
-	background: $listBg;
+
+	@include bp800 {
+		padding: 30px;
+		text-align: left;
+	}
+
+	.title {
+		color: $pink;
+		text-transform: uppercase;
+		letter-spacing: 6px;
+		margin: 0px 0px 20px 0px;
+	}
+}
+
+.sidebar-item__info {
+    
+}
+
+.sidebar-item__sidebar {
+    
+}
+
+.sidebar-item__featured-post {
+	a {
+		border-top: #CBCDD0 solid 1px;
+		@include font-din-400;
+		text-decoration: none;
+		display: block;
+		position: relative;
+		padding: 10px 20px;	
+		margin: 20px 0px 0px 0px;
+
+		&:after {
+			content: "\f105";
+			margin-left: -8px;
+			font: 1em/1 FontAwesome;
+			position: absolute;
+			right: 20px;
+			top: 13px;
+		}
+	}
+}
+
+.sidebar-item__featured-image {
+	height: 200px;
+	overflow: hidden;
+	border-radius: 20px;
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.sidebar-item__news-block {
+	margin-bottom: 15px;
+	padding: 20px;
+	text-align: center;
+	list-style: none;
 
 	@include bp800 {
 		padding: 30px;

@@ -17,17 +17,4 @@
 	
 	<?php include locate_template('parts/about.php'); ?>
 
-	<!-- <main class="site-content">
-		<div class="container">
-			<?php if (have_posts()): while (have_posts()): the_post(); ?>
-
-				<article class="copy">
-					<h1><?php the_field('h1'); ?></h1>
-					<?php the_content(); ?>
-				</article>
-
-			<?php endwhile; endif; ?>
-		</div>
-	</main> -->
-
 <?php get_footer(); ?>
