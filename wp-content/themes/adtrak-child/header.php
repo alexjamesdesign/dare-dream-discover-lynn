@@ -46,6 +46,13 @@
 			}
 		}
 
+		.search-form input.search-field {
+			background-image: url(<?php echo get_stylesheet_directory_uri(); ?>/images/looking-glass.svg);
+			background-size: 25px 25px;
+			background-repeat: no-repeat;
+			background-position: 9px 9px;
+		}
+
   	</style>
 
   	<?php /* Load CSS async */ ?>
