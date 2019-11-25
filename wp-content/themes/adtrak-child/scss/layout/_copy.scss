@@ -7,7 +7,38 @@
 .site-content {
     padding: 20px;
     @include clearfix;
+    
+
+    &__info {
+        @include font-anton-400;
+        background: $pink;
+        color: $blanc;
+        border-radius: 20px 20px 0px 0px;
+        padding: 15px 25px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin-bottom: 20px;
+       
+
+        @include bp800 {
+            display: flex;
+        }
+    }
+    
+    &__category {
+        flex: 2;
+    }
+
+    &__date {
+        padding: 0px 30px 0px 0px;
+    }
+
+    &__comments {
+        
+    }
 }
+
+
 
 .copy {
 

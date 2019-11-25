@@ -10,17 +10,38 @@
 
 <?php
 	get_header();
-	
-	$category = get_the_category();
-	$firstCategory = $category[0]->cat_name; echo $firstCategory;
 ?>
 
 	<main class="site-content site-content--single">
 		<div class="container site-content--single">
-			<div class="site-content__into">
-				<?php echo $firstCategory;?>
+			<div class="site-content__info">
+				<div class="site-content__category">
+					<?php
+						// Get terms for post
+						$terms = get_the_terms( $post->ID , 'destination-categories' );
+					
+						// Loop over each item since it's an array
+						if ( $terms != null ){
+							foreach( $terms as $term ) {
+							// Print the name method from $term which is an OBJECT
+							print $term->slug ;
+							// Get rid of the other data stored in the object, since it's not needed
+							unset($term);
+						} }
+					?>
+				</div>
+
+				<div class="site-content__date">
+					<?php the_date(); ?>
+				</div>
+
+				<div class="site-content__comments">
+					<?php echo get_comments_number($post->ID); ?>
+				</div>
+				
 			</div>
 		</div>
+
 		<div class="container site-content__container">
 			<article class="copy">				
 				<?php the_title('<h1>', '</h1>'); ?>
