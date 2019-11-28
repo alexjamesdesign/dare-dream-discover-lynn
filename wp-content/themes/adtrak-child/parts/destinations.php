@@ -1,3 +1,5 @@
+<?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );  ?>
+
 <div class="wrapper destinations__wrapper">
 
     <div class="container destinations__container">
@@ -7,7 +9,7 @@
         <div class="destinations-section">
 
             <?php
-            $terms = get_terms( 'destination-categories', array(
+            $terms = get_terms( 'destination_category_taxonomy', array(
                 'hide_empty' => true,
             ));
 

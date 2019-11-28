@@ -184,68 +184,67 @@ Register Custom Post Type - Destinations
  
 ======================================================================================================================== */
 
+// Register Advice Centre
+// Register Custom Post Type
 function destinations_post_type() {
 
 	$labels = array(
-		'name'                  => _x( 'Destinations', 'Post Type General Name', 'text_domain' ),
-		'singular_name'         => _x( 'Destination', 'Post Type Singular Name', 'text_domain' ),
-		'menu_name'             => __( 'Destinations', 'text_domain' ),
-		'name_admin_bar'        => __( 'Destinations', 'text_domain' ),
-		'archives'              => __( 'Destinations', 'text_domain' ),
-		'attributes'            => __( 'Item Attributes', 'text_domain' ),
-		'parent_item_colon'     => __( 'Parent Item:', 'text_domain' ),
-		'all_items'             => __( 'All Items', 'text_domain' ),
-		'add_new_item'          => __( 'Add New Item', 'text_domain' ),
-		'add_new'               => __( 'Add New', 'text_domain' ),
-		'new_item'              => __( 'New Item', 'text_domain' ),
-		'edit_item'             => __( 'Edit Item', 'text_domain' ),
-		'update_item'           => __( 'Update Item', 'text_domain' ),
-		'view_item'             => __( 'View Item', 'text_domain' ),
-		'view_items'            => __( 'View Items', 'text_domain' ),
-		'search_items'          => __( 'Search Item', 'text_domain' ),
-		'not_found'             => __( 'Not found', 'text_domain' ),
-		'not_found_in_trash'    => __( 'Not found in Trash', 'text_domain' ),
-		'featured_image'        => __( 'Featured Image', 'text_domain' ),
-		'set_featured_image'    => __( 'Set featured image', 'text_domain' ),
-		'remove_featured_image' => __( 'Remove featured image', 'text_domain' ),
-		'use_featured_image'    => __( 'Use as featured image', 'text_domain' ),
-		'insert_into_item'      => __( 'Insert into item', 'text_domain' ),
-		'uploaded_to_this_item' => __( 'Uploaded to this item', 'text_domain' ),
-		'items_list'            => __( 'Items list', 'text_domain' ),
-		'items_list_navigation' => __( 'Items list navigation', 'text_domain' ),
-		'filter_items_list'     => __( 'Filter items list', 'text_domain' ),
+	  'name'                  => _x( 'Destinations', 'Post Type General Name', 'text_domain' ),
+	  'singular_name'         => _x( 'Destination', 'Post Type Singular Name', 'text_domain' ),
+	  'menu_name'             => __( 'Destinations', 'text_domain' ),
+	  'name_admin_bar'        => __( 'Destinations', 'text_domain' ),
+	  'archives'              => __( 'Destination Archives', 'text_domain' ),
+	  'parent_item_colon'     => __( 'Parent Item:', 'text_domain' ),
+	  'all_items'             => __( 'All Destinations', 'text_domain' ),
+	  'add_new_item'          => __( 'Add New Destinations', 'text_domain' ),
+	  'add_new'               => __( 'Add New', 'text_domain' ),
+	  'new_item'              => __( 'New Destination', 'text_domain' ),
+	  'edit_item'             => __( 'Edit Destinations', 'text_domain' ),
+	  'update_item'           => __( 'Update Destinations', 'text_domain' ),
+	  'view_item'             => __( 'View Destinations', 'text_domain' ),
+	  'search_items'          => __( 'Search Destinations', 'text_domain' ),
+	  'not_found'             => __( 'Not found', 'text_domain' ),
+	  'not_found_in_trash'    => __( 'Not found in Trash', 'text_domain' ),
+	  'featured_image'        => __( 'Featured Image', 'text_domain' ),
+	  'set_featured_image'    => __( 'Set featured image', 'text_domain' ),
+	  'remove_featured_image' => __( 'Remove featured image', 'text_domain' ),
+	  'use_featured_image'    => __( 'Use as featured image', 'text_domain' ),
+	  'insert_into_item'      => __( 'Insert into item', 'text_domain' ),
+	  'uploaded_to_this_item' => __( 'Uploaded to this item', 'text_domain' ),
+	  'items_list'            => __( 'Items list', 'text_domain' ),
+	  'items_list_navigation' => __( 'Items list navigation', 'text_domain' ),
+	  'filter_items_list'     => __( 'Filter items list', 'text_domain' ),
 	);
 	$rewrite = array(
-		'slug'                => 'destinations/%year%',
-		'with_front' => true,
-		'pages' => true,
-		'feeds' => true,
+		  'slug'                       => 'destinations/%destination_category_taxonomy%',
+		  'with_front'                 => false,
+		  'hierarchical'               => true,
 	);
 	$args = array(
-		'label'                 => __( 'Destinations', 'text_domain' ),
-		'description'           => __( 'Destinations', 'text_domain' ),
-		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'thumbnail', 'page-attributes'),
-		'taxonomies'            => array('destinations-category', 'post_tag'),
-		'hierarchical'          => true,
-		'public'                => true,
-		'show_ui'               => true,
-		'show_in_menu'          => true,
-		'menu_position'         => 5,
-		'menu_icon'             => 'dashicons-images-alt2',
-		'show_in_admin_bar'     => true,
-		'show_in_nav_menus'     => true,
-		'can_export'            => true,
-		'has_archive'           => true,		
-		'exclude_from_search'   => false,
-		'publicly_queryable'    => true,
-		'capability_type'       => 'page',
+	  'label'                 => __( 'Resource', 'text_domain' ),
+	  'description'           => __( 'A hub for all resources.', 'text_domain' ),
+	  'labels'                => $labels,
+	  'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+	  'taxonomies'            => array( 'destination_category_taxonomy' ),
+	  'hierarchical'          => false,
+	  'public'                => true,
+	  'show_ui'               => true,
+	  'show_in_menu'          => true,
+	  'menu_position'         => 5,
+	  'menu_icon'             => 'dashicons-media-code',
+	  'show_in_admin_bar'     => true,
+	  'show_in_nav_menus'     => true,
+	  'can_export'            => true,
+	  'has_archive'           => true,    
+	  'exclude_from_search'   => false,
+	  'publicly_queryable'    => true,
+	  'capability_type'       => 'post',
+	  'rewrite'               => $rewrite,
 	);
 	register_post_type( 'destinations', $args );
-
-}
-add_action( 'init', 'destinations_post_type', 0 );
-
+  
+  }
+  add_action( 'init', 'destinations_post_type', 0 );
 
 
 /* ========================================================================================================================
@@ -254,47 +253,68 @@ Register Custom Taxonomy - Destinations
     
 ======================================================================================================================== */
 
+// Advice Centre Taxonomy
 function destination_category_taxonomy() {
 
 	$labels = array(
-		'name'                       => _x( 'Destinations', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Destination', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Destinations', 'text_domain' ),
-		'all_items'                  => __( 'All Destinations', 'text_domain' ),
-		'parent_item'                => __( 'Parent Destination', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Destination:', 'text_domain' ),
-		'new_item_name'              => __( 'New Destination Name', 'text_domain' ),
-		'add_new_item'               => __( 'Add Destination', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Destination', 'text_domain' ),
-		'update_item'                => __( 'Update Destination', 'text_domain' ),
-		'view_item'                  => __( 'View Destination', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove items', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most used', 'text_domain' ),
-		'popular_items'              => __( 'Popular Items', 'text_domain' ),
-		'search_items'               => __( 'Search Items', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-		'no_terms'                   => __( 'No items', 'text_domain' ),
-		'items_list'                 => __( 'Items list', 'text_domain' ),
-		'items_list_navigation'      => __( 'Items list navigation', 'text_domain' ),
+	  'name'                       => _x( 'Destinations', 'Taxonomy General Name', 'text_domain' ),
+	  'singular_name'              => _x( 'Destination', 'Taxonomy Singular Name', 'text_domain' ),
+	  'menu_name'                  => __( 'Destinations', 'text_domain' ),
+	  'all_items'                  => __( 'All Destinations', 'text_domain' ),
+	  'parent_item'                => __( 'Parent Destination', 'text_domain' ),
+	  'parent_item_colon'          => __( 'Parent Destination:', 'text_domain' ),
+	  'new_item_name'              => __( 'New Category Name', 'text_domain' ),
+	  'add_new_item'               => __( 'Add New Category', 'text_domain' ),
+	  'edit_item'                  => __( 'Edit Category', 'text_domain' ),
+	  'update_item'                => __( 'Update Category', 'text_domain' ),
+	  'view_item'                  => __( 'View Item', 'text_domain' ),
+	  'separate_items_with_commas' => __( 'Separate categories with commas', 'text_domain' ),
+	  'add_or_remove_items'        => __( 'Add or remove categories', 'text_domain' ),
+	  'choose_from_most_used'      => __( 'Choose from the most used categories', 'text_domain' ),
+	  'popular_items'              => __( 'Popular Categories', 'text_domain' ),
+	  'search_items'               => __( 'Search categories', 'text_domain' ),
+	  'not_found'                  => __( 'Not Found', 'text_domain' ),
+	  'no_terms'                   => __( 'No items', 'text_domain' ),
+	  'items_list'                 => __( 'Items list', 'text_domain' ),
+	  'items_list_navigation'      => __( 'Items list navigation', 'text_domain' ),
 	);
 	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-		'rewrite'           => array( 'slug' => 'my-destinations', 'with_front' => false ),
+	  'labels'                     => $labels,
+	  'hierarchical'               => true,
+	  'public'                     => true,
+	  'show_ui'                    => true,
+	  'show_admin_column'          => true,
+	  'show_in_nav_menus'          => true,
+	  'show_tagcloud'              => true,
+	  'rewrite'                    => array( 'slug' => 'destinations', 'with_front' => false ),
 	);
-	register_taxonomy( 'destination-categories', array( 'destinations' ), $args );
+	register_taxonomy( 'destination_category_taxonomy', array( 'destinations' ), $args );
+  
+  }
+  add_action( 'init', 'destination_category_taxonomy', 0 );   
 
+
+
+/**
+ * Inject term slug into custom post type permastruct.
+ * 
+ * @link   http://wordpress.stackexchange.com/a/5313/1685
+ * 
+ * @param  string  $link
+ * @param  WP_Post $post 
+ * @return array
+ */
+
+function wpse_5308_post_type_link( $link, $post ) {
+    if ( $post->post_type === 'destinations' ) {
+        if ( $terms = get_the_terms( $post->ID, 'destination_category_taxonomy' ) )
+            $link = str_replace( '%destination_category_taxonomy%', current( $terms )->slug, $link );
+    }
+
+    return $link;
 }
-add_action( 'init', 'destination_category_taxonomy', 0 );
 
-
-
+add_filter( 'post_type_link', 'wpse_5308_post_type_link', 10, 2 );
 
 
 

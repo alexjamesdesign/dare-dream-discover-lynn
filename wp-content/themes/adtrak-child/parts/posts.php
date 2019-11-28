@@ -56,7 +56,7 @@
 
             <a class="post-i post-<?php echo $i; ?>" href="<?php the_permalink(); ?>">
                     
-                <p class="destination-name"><?php echo strip_tags ( get_the_term_list( get_the_ID(), 'destination-categories', "",", " )); ?></p>
+                <p class="destination-name"><?php echo strip_tags ( get_the_term_list( get_the_ID(), 'destination_category_taxonomy', "",", " )); ?></p>
 
                 <div class="post-name" href="<?php the_permalink(); ?>"><?php the_title(); ?></div>
                 

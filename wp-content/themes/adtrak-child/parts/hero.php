@@ -124,10 +124,6 @@ Everything else
 				<p class="hero__primary"><?php the_field('h1'); ?></p>
 			<?php endif; ?>
 
-			
-
-			
-
 		<?php endif; wp_reset_postdata(); ?>
 
 		</div>	

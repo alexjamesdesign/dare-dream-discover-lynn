@@ -18,7 +18,7 @@
 				<div class="site-content__category">
 					<?php
 						// Get terms for post
-						$terms = get_the_terms( $post->ID , 'destination-categories' );
+						$terms = get_the_terms( $post->ID , 'destination_category_taxonomy' );
 					
 						// Loop over each item since it's an array
 						if ( $terms != null ){
