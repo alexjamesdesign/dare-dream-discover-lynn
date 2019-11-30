@@ -7,8 +7,12 @@
 }
 
 .destinations-section {
-    padding: 20px;
+    padding: 20px 0px;
     @include clearfix;
+
+    @include bp800 {
+        padding: 20px;
+    }
 } 
 
 .destinations-section {

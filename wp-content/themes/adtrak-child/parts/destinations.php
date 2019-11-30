@@ -4,7 +4,7 @@
 
     <div class="container destinations__container">
 
-        <p class="title">Destinations</p>
+        <p class="title">Destinations Part</p>
 
         <div class="destinations-section">
 
@@ -42,7 +42,7 @@
 
                 <a class="destination-i destination-<?php echo $i; ?>" href="<?php echo $term->slug;?>">
                         
-                    <p class="destination-name"><?php echo $term->name;?></p>
+                    <p class="destination-name"><?php echo ($term->name); ?></p>
                     
                     <?php 
                         $ld_location = get_field('location');

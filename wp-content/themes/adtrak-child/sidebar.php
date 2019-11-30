@@ -34,7 +34,7 @@ if (is_home() || is_singular('destinations') || is_month() || is_category() || i
 		<p class="title">Categories</p>
 		
 		<?php
-		$terms = get_terms( 'destination-categories', array(
+		$terms = get_terms( 'destination_category_taxonomy', array(
 			'hide_empty' => true,
 		));
 
