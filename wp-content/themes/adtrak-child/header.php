@@ -15,6 +15,11 @@
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<?php if (strpos($_SERVER['SERVER_NAME'],'alexjamesdesign.co.uk') !== false) : ?>
+    	<meta name="robots" content="noindex">
+    	<meta name="googlebot" content="noindex">
+	<?php endif; ?>
+
 	<?php /* Path dependent critical CSS */ ?>
   	<style type="text/css">
   		<?php include ('css/critical.css'); ?>
