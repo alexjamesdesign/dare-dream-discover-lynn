@@ -5,27 +5,31 @@
 
 header {
 
-    &:before {
-        /* Pseudo element to push content down */
-        content: '';
-       	height: $mobile-top-bar-height;
-        display: block;
-        
-        @include bp800 {
-            display: none;
-        }
-    }
-
     .header--container {
+        height: 250px;
+        margin-bottom: -110px;
+
         @include bp800 {
             display: flex;
             align-content: space-between;
             padding: 30px 40px 0px 40px;
+            margin: 0;
+            height: auto;
+        }
+
+        a {
+            display: flex;
+            justify-content: center;
         }
     }
 
     .search {
         z-index: 3;
+        display: none;
+
+        @include bp800 {
+            display: block;
+        }
     }
 
     .search-form {
@@ -75,12 +79,19 @@ header {
     margin: 0 auto;
     padding: 10px 5px;
 
+    position: absolute;
+    height: 250px;
+    z-index: 200;
+
     &:hover {
-        opacity: 0.8;
+        transform: rotate(5deg);
     }
 
     @include bp800 {
         float: left;
+        position: relative;
+        height: auto;
+        z-index: initial;
     }
 }
 

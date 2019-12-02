@@ -32,8 +32,21 @@
 			mask-repeat: no-repeat;
 			-webkit-mask-repeat: no-repeat;
 			-webkit-mask-size: 100%;
+			overflow: hidden;
 		}
 		
+		@media screen and (min-width: 600px) {
+			.hero__image {
+				mask-image: url(<?php echo get_stylesheet_directory_uri(); ?>/images/hero-mask-tablet.svg);
+				-webkit-mask-image: url(<?php echo get_stylesheet_directory_uri(); ?>/images/hero-mask-tablet.svg);
+				mask-mode: alpha;
+				-webkit-mask-mode: alpha;
+				mask-repeat: no-repeat;
+				-webkit-mask-repeat: no-repeat;
+				-webkit-mask-size: 100%;
+			}
+		}
+
 		@media screen and (min-width: 800px) {
 			.hero__image {
 				mask-image: url(<?php echo get_stylesheet_directory_uri(); ?>/images/hero-mask.svg);
@@ -102,9 +115,7 @@
 		<?php include locate_template('parts/mobile-top-bar.php'); ?>
 
 		<header>
-
-			
-			   
+   
 			<div class="container header--container">
 
 				<a href="<?php echo home_url(); ?>">
@@ -134,9 +145,15 @@
 
 			</div>
 			
-			<?php include locate_template('parts/hero-image.php'); ?>
+			<div class="hero-section">
+			
+				<?php include locate_template('parts/hero-image.php'); ?>
 
-			<?php include locate_template('parts/hero.php'); ?>
+				<?php include locate_template('parts/hero.php'); ?>
+
+			</div>
+
+			<?php include locate_template('parts/newsletter.php'); ?>
 			
 		</header>
 

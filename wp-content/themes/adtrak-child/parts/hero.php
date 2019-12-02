@@ -120,6 +120,8 @@ Everything else
 				<p class="hero__primary"><?php the_title(); ?></p>
 			<?php elseif (is_post_type_archive('destinations')) : ?>
 				<p class="hero__primary">Destinations.</p>
+			<?php elseif (taxonomy_exists( $taxonomy )) : ?>
+				<p class="hero__primary"><?php echo strip_tags ( get_the_term_list( get_the_ID(), 'destination_category_taxonomy', "",", " )); ?>.</p>
 			<?php else : ?>
 				<p class="hero__primary"><?php the_field('h1'); ?></p>
 			<?php endif; ?>
@@ -131,5 +133,3 @@ Everything else
 	</div>
 
 </div>
-
-<?php include locate_template('parts/newsletter.php'); ?>

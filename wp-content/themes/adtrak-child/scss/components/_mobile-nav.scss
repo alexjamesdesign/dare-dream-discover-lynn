@@ -14,12 +14,12 @@ $linkBg :             transparent;
 $linkText :           rgba(#000,.65);
 $linkBorder :         rgba(#000,.15);
 $linkBgActive :       transparent;
-$linkTextActive :     red;
+$linkTextActive :     $pink;
 
 $dropdownArrowBg :    transparent;
 $dropdownArrowText :  inherit;
 
-$closeIconBg :        red;
+$closeIconBg :        $pink;
 $closeIconText :      #fff;
 
 .mob-nav {
@@ -61,6 +61,7 @@ $closeIconText :      #fff;
     }
 
     a {
+        @include font-din-700;
         padding: 15px 60px 15px 20px;
         text-decoration: none;
         color: $linkText;
@@ -154,6 +155,7 @@ $closeIconText :      #fff;
     background-color: $closeIconBg;
     -webkit-transform: translateX(-100%);
     transform: translateX(-100%);
+    border-radius: 30px 0px 0px 30px;
     display: none;
 
     i {

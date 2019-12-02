@@ -2,20 +2,7 @@
     Mobile Top Bar
 --------------------------------------------------------------- */
 
-.mobile-top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: $mobile-top-bar-height;
-    background: #eee;
-    @include flexbox();
-    @include clearfix;
 
-    @include bp800 {
-        display: none;
-    } 
-}
 
 .mobile-top-btn {
     display: inline-block;
@@ -23,11 +10,24 @@
     padding: 8px;
     text-align: center;
     text-decoration: none;
+    @include font-anton-400;
+    position: fixed;
+    top: 0;
+    z-index: 200;
+
+    @include bp800 {
+        display: none;
+    } 
 
     &--menu {
-        width: 35%;
         color: $blanc;
-        background: $noir;
+        background: $pink;
+        border-radius: 0px 30px 30px 0px;
+        padding: 15px 30px 13px 30px;
+
+        i {
+            font-size: 25px;
+        }
     }
     
     // Used when only one number is in the mobile top bar
@@ -44,43 +44,5 @@
         a {
             color: $noir;        
         }
-    }
-}
-
-// Used to trigger multiple numbers in the mobile top bar
-.js-toggle-location-numbers {
-    display: block;
-    padding: 5px;
-    width: 65%;
-    float: left;
-    text-align: center;
-}
-
-.location-numbers {
-    top: $mobile-top-bar-height;
-    position: absolute;
-    left: 0;
-    padding: 10px;
-    display: none;
-    width: 100%;
-    background: darken($blanc,20);
-    overflow-y: scroll;
-    max-height: 80vh;
-
-    &--visible {
-        display: block;
-    }
-
-    a {
-        white-space: nowrap;
-    }
-
-    .ld-phonenumber {
-        font-size: 2rem;
-        display: block;
-    }
-    
-    .ld-location {
-        padding: 5px 0;
     }
 }

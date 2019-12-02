@@ -11,7 +11,7 @@
     get_header();
     include locate_template('parts/buckets.php');
 ?>
-	<div class="top-bg"></div>
+	<!-- <div class="top-bg"></div> -->
 
 	<?php include locate_template('parts/posts.php'); ?>
 	
