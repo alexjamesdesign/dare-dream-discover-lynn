@@ -15,7 +15,7 @@
 
 	if ( $thumb_id ) : ?>
 
-		<div class="hero__image"><img src="<?php echo $thumb_url_small; ?>" alt="Dare Dream Discover"></div>
+		<div class="hero__image"><img src="<?php echo $thumb_url_large; ?>" alt="Dare Dream Discover"></div>
 
 <?php endif; ?>
 

@@ -23,6 +23,13 @@
   }
 }
 
+@mixin bp600 {
+	@media (min-width: #{$m-small-width}) {
+	  @content;
+	}
+}
+
+  
 @mixin bp800 {
   @media (min-width: #{$small-width}) {
     @content;

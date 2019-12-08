@@ -33,10 +33,10 @@
 
             $thumb_id = get_post_thumbnail_id();
 
-            $thumb_url_array_small = wp_get_attachment_image_src($thumb_id, 'small', true);
+            $thumb_url_array_small = wp_get_attachment_image_src($thumb_id, 'medium', true);
             $thumb_url_small = $thumb_url_array_small[0];
 
-            $thumb_url_array_medium = wp_get_attachment_image_src($thumb_id, 'medium', true);
+            $thumb_url_array_medium = wp_get_attachment_image_src($thumb_id, 'large', true);
             $thumb_url_medium = $thumb_url_array_medium[0];
 
             if ( $thumb_id ) : ?>
@@ -48,6 +48,7 @@
                     @media (min-width: 600px) {
                         .post-<?php echo $i; ?> {
                         background-image: url(<?php echo $thumb_url_medium; ?>);
+                        background-position: center;
                         }
                     }
                 </style>

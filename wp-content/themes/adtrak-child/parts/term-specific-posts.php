@@ -11,7 +11,7 @@
         <div class="posts">
             <?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );  ?>
 
-            <?php if ( have_posts() ) : $count = 0; while (have_posts()) : the_post(); ?>
+            <?php if ( have_posts() ) : $i = 0; while (have_posts()) : the_post(); $i++  ?>
 
             <?php
 
@@ -20,10 +20,10 @@
 
             $thumb_id = get_post_thumbnail_id();
 
-            $thumb_url_array_small = wp_get_attachment_image_src($thumb_id, 'small', true);
+            $thumb_url_array_small = wp_get_attachment_image_src($thumb_id, 'medium', true);
             $thumb_url_small = $thumb_url_array_small[0];
 
-            $thumb_url_array_medium = wp_get_attachment_image_src($thumb_id, 'medium', true);
+            $thumb_url_array_medium = wp_get_attachment_image_src($thumb_id, 'large', true);
             $thumb_url_medium = $thumb_url_array_medium[0];
 
             if ( $thumb_id ) : ?>
@@ -49,7 +49,7 @@
                 
             </a>
 
-            <?php $count++; endwhile; endif; wp_reset_query(); ?>
+            <?php $i++; endwhile; endif; wp_reset_query(); ?>
         </div>
 
     </div>

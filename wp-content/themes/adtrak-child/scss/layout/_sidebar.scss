@@ -84,13 +84,14 @@ $linkBg : lighten(#ccc,5);
 }
 
 .sidebar-item__featured-image {
-	height: 200px;
+	height: 280px;
 	overflow: hidden;
 	border-radius: 20px;
 
 	img {
 		width: 100%;
 		height: auto;
+		margin-top: -90px;
 	}
 }
 

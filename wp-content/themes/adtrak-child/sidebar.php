@@ -22,7 +22,7 @@ if (is_home() || is_singular('destinations') || is_month() || is_category() || i
 			?>
 			<div>
 				<div class="title">Featured Post</div>
-				<div class="sidebar-item__featured-image"><?php echo get_the_post_thumbnail( $post_id, 'thumbnail', array( 'class' => 'alignleft' ) ); ?></div>
+				<div class="sidebar-item__featured-image"><?php echo get_the_post_thumbnail( $post_id, 'img-600-600', array( 'class' => 'alignleft' ) ); ?></div>
 				<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 			</div>
 			<?php wp_reset_postdata(); // IMPORTANT - reset the $post object so the rest of the page works correctly ?>
