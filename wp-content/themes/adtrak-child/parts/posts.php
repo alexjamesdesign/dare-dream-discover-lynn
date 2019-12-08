@@ -14,8 +14,8 @@
             $query_args = array(
                 'post_type' 			=> 'destinations',
                 'posts_per_page'        => -1,
-                'order'                 => 'ASC',
-                'orderby'               => 'title',
+                'order'                 => 'DESC',
+                'orderby'               => 'date',
                 'paged'          		=> $paged,
             );
 
