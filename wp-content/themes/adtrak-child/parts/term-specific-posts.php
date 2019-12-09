@@ -4,7 +4,8 @@
 
         <div class="title-full">
             <div class="line"></div>
-            <p>My Adventures (Post Part term specific posts)</p>
+            <p>My Adventures</p>
+            <!--<p>(Post Part term specific posts)</p>-->
             <div class="line"></div>
         </div>
 

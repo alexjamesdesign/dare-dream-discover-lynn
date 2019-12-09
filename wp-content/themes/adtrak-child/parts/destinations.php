@@ -4,7 +4,7 @@
 
     <div class="container destinations__container">
 
-        <p class="title">Destinations Part</p>
+        <!--<p class="title">Destinations Part</p>-->
 
         <div class="destinations-section">
 

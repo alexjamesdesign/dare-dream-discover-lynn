@@ -12,7 +12,7 @@
     get_header();
 ?>
 
-<p class="title">Destinations Taxo php</p>
+<!--<p class="title">Destinations Taxo php</p>-->
 
 <?php include locate_template('parts/term-specific-posts.php'); ?>
 

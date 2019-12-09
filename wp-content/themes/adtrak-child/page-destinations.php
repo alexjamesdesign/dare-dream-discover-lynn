@@ -12,7 +12,7 @@
     include locate_template('parts/buckets.php');
 ?>
 	<div class="top-bg"></div>
-    <p>PAGE DESTINATIONS</p>
+    <!--<p>PAGE DESTINATIONS</p>-->
 	<?php include locate_template('parts/destinations.php'); ?>
 	<?php include locate_template('parts/about.php'); ?>
 
