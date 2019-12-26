@@ -2,7 +2,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 // Blog Sidebar
 //----------------------------------------------------------------------------------------------------------------------
-if (is_home() || is_singular('destinations') || is_month() || is_category() || is_search()) : ?>
+if (is_home() || is_singular('destinations') || is_month() || is_category() ||  is_page('about-me') || is_search()) : ?>
 
 	<!-- <div class="sidebar-item sidebar-item__news-block">
 		<?php get_search_form(); ?>
