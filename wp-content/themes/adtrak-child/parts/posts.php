@@ -4,9 +4,11 @@
 
         <div class="title-full">
             <div class="line"></div>
-            <p>My Adventures</p>
+            <p class="title-p">My Adventures</p>
             <div class="line"></div>
         </div>
+
+        <p class="title-full-description">Here is a text area where you can write a brief summary about your vitit to a certain country which will be a nice introduction for the posts which are listed below. You may want to write something about when you visited, the reason for the visit etc. If left blank, this section will simply just not show :).</p>
 
         <div class="posts">
             <?php $i = 0; 

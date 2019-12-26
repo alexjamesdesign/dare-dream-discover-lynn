@@ -46,12 +46,25 @@ body {
         font-size: 36px;
         text-align: center;
         flex: 1;
+        margin: 0 auto;
     }
 
     .line {
         height: 1px;
         background: #97B5D1;
         flex: 1;
+    }
+}
+
+.title-full-description {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0px;
+    @include font-din-400;
+
+    @include bp800 {
+        padding: 0 50px;
     }
 }
 

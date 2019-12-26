@@ -11,10 +11,10 @@ sites style will go.
 // Import the critical CSS
 
 @import
+	'base/_typography',
 	'base/_core',
 	'base/_grid-spacing',
 	'base/_reset',
-	'base/_typography',
 	'components/_general';
 
 @import
