@@ -9,7 +9,7 @@
                 <p class="title-p">Destinations</p>
                 <div class="line"></div>
         </div>
-
+        
         <p class="title-full-description">Here is a text area where you can write a brief summary about your vitit to a certain country which will be a nice introduction for the posts which are listed below. You may want to write something about when you visited, the reason for the visit etc. If left blank, this section will simply just not show :).</p>
 
         <div class="destinations-section">
@@ -63,6 +63,24 @@
 
 
             <?php endforeach; ?>
+
+            <div class="pagination">
+            <nav>
+                <?php
+                    $big = 999999999; // need an unlikely integer
+
+                    echo paginate_links( array(
+                        'current' => max( 1, get_query_var('paged') ),
+                        'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+                        'format' => '?paged=%#%',
+                        'prev_text' => __( 'Back', 'textdomain' ),
+                        'next_text' => __( 'Next', 'textdomain' ),
+
+                        'total' => $the_query->max_num_pages
+                    ) );
+                ?>
+            </nav>
+        </div><!-- pagination -->
 
         </div>
             

@@ -8,14 +8,24 @@
             <div class="line"></div>
         </div>
 
+        <?php if (!is_front_page()) : ?>
+
         <p class="title-full-description">Here is a text area where you can write a brief summary about your vitit to a certain country which will be a nice introduction for the posts which are listed below. You may want to write something about when you visited, the reason for the visit etc. If left blank, this section will simply just not show :).</p>
+
+        <?php endif; ?>
 
         <div class="posts">
             <?php $i = 0; 
-            $paged = (get_query_var('page')) ? get_query_var('page') : 1;
+            
+            if ( get_query_var( 'paged' ) ) { $paged = get_query_var( 'paged' ); }
+            elseif ( get_query_var( 'page' ) ) { $paged = get_query_var( 'page' ); }
+            else { $paged = 1; }
+            
+            $the_query = new WP_Query('posts_per_page=3&paged=' . $paged); 
+
             $query_args = array(
                 'post_type' 			=> 'destinations',
-                'posts_per_page'        => -1,
+                'posts_per_page'        => 12,
                 'order'                 => 'DESC',
                 'orderby'               => 'date',
                 'paged'          		=> $paged,
@@ -72,8 +82,38 @@
                 
                 </a>
 
-            <?php endwhile; endif; wp_reset_query(); ?>
+            <?php endwhile; ?>
+
+            <?php endif; wp_reset_query(); ?>
         </div>
+
+        <?php if ( is_front_page() ) : ?>
+        
+            <div class="view-all-btn">
+                <a href="<?php echo site_url(); ?>/posts" class="btn view-all-btn">View All Adventures</a>
+            </div>
+
+        <?php else : ?>
+
+            <div class="pagination">
+                <nav>
+                    <?php
+                        $big = 999999999; // need an unlikely integer
+
+                        echo paginate_links( array(
+                            'current' => max( 1, get_query_var('paged') ),
+                            'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+                            'format' => '?paged=%#%',
+                            'prev_text' => __( 'Back', 'textdomain' ),
+                            'next_text' => __( 'Next', 'textdomain' ),
+
+                            'total' => $the_query->max_num_pages
+                        ) );
+                    ?>
+                </nav>
+            </div><!-- pagination -->
+
+        <?php endif; ?>    
 
     </div>
 

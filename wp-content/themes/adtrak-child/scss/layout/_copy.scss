@@ -127,3 +127,30 @@
     }
 }
 
+.pagination {
+    margin: 60px 0px 0px 0px;
+
+    nav {
+        display: flex;
+        justify-content: center;
+        background: $pink;
+
+        a.page-numbers, span {
+            padding: 5px 11px;
+            background: $blanc;
+            margin: 3px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: $noir;
+            @include font-din-400;
+
+            &.next {
+                align-self: flex-end;
+            }
+
+            &.current {
+                @include font-din-700;
+            }
+        }
+    }
+}
