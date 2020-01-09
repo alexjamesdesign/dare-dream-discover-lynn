@@ -111,6 +111,9 @@ add_action('after_setup_theme', function () {
 
     add_image_size( 'img-2000-650', 2000, 650, true );
 	add_image_size( 'img-1200-500', 1200, 500, true );
+
+	add_image_size( 'img-1015-1100', 1015, 1100, true );
+	
 	add_image_size( 'img-600-600', 600, 600, true );
 	add_image_size( 'img-350-350', 350, 350, true );
 

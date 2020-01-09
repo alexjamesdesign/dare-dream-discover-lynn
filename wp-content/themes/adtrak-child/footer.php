@@ -9,7 +9,7 @@
 
 	<footer class="footer">
 		<div class="container">
-			<div class="grid grid2_12 footer__logo">
+			<div class="footer__logo">
 				<a href="<?php echo home_url(); ?>">
 					<?php $image = get_field('site_logo','option'); if( !empty($image) ): ?>
 						<img class="lazyload" data-src="<?php echo $image['url']; ?>" alt="<?php bloginfo('title'); ?> Logo" />
@@ -17,7 +17,7 @@
 				</a>
 			</div>
 
-			<div class="grid grid4_12 footer__explore">
+			<div class="footer__explore">
 				<h6>Explore</h6>
 				<?php wp_nav_menu([
 					'menu' => 'Footer Menu', 

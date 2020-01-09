@@ -7,20 +7,13 @@
 }
 
 .destinations-section {
-    padding: 20px 0px;
-    @include clearfix;
+    display: flex;
+    flex-wrap: wrap;
 
     @include bp800 {
-        padding: 20px;
-    }
-} 
-
-.destinations-section {
-    display: block;
-
-    @include bp800 {
-        display: flex;
+        padding: 40px 0px 0px 0px;
         flex-wrap: wrap;
+        justify-content: center; 
     }
 }
 
@@ -47,31 +40,28 @@
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
-    display: flex;
     border-radius: 0px 10px 10px 10px;
-    margin: 40px auto 80px auto;
+    margin: 30px auto 30px auto;
     max-width: 600px;
-
-    &:nth-of-type(odd) {
-        @include bp800 {
-            margin: 60px 0px 0px 0px;
-            border-right: 30px solid #fff;
-        }
-    }
-
-    &:nth-of-type(even) {
-        @include bp800 {
-            margin: 60px 0px 0px 0px;
-            border-left: 30px solid #fff;
-        }
-    }
+    width: 100%;
 
     @include bp800 {
+        margin: 20px 0;
         width: 50%;
-        float: left;
-        max-width: none;
+        border-left: 20px solid white;
+        border-right: 20px solid white;
+        border-top: 0px solid white;
+        border-bottom: 0px solid white;
+        border-radius: 0px 0px 10px 10px;
     }
-    
+
+    @include bp1000 {
+        width: 33.3%;
+        border-left: 20px solid white;
+        border-right: 20px solid white;
+        border-top: 0px solid white;
+        border-bottom: 0px solid white;
+    }
 } 
 
 .destination-name {

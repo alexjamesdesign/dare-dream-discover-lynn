@@ -5,7 +5,7 @@
 .posts {
     display: block;
 
-    @include bp800 {
+    @include bp600 {
         display: flex;
         flex-wrap: wrap;
     }
@@ -29,7 +29,7 @@
 
 .post-i {
     padding: 20px;
-    min-height: 400px;
+    min-height: 300px;
     color: $noir;
     @include clearfix;
     background-size: cover;
@@ -41,7 +41,16 @@
     max-width: 600px;
     background-position: center;
 
+    @include bp800 {
+        min-height: 400px;
+    }
+
     &:nth-of-type(odd) {
+        @include bp600 {
+            margin: 80px 0px 0px 0px;
+            border-right: 20px solid #fff;
+        }
+
         @include bp800 {
             margin: 60px 0px 0px 0px;
             border-right: 30px solid #fff;
@@ -49,13 +58,18 @@
     }
 
     &:nth-of-type(even) {
+        @include bp600 {
+            margin: 80px 0px 0px 0px;
+            border-left: 20px solid #fff;
+        }
+
         @include bp800 {
             margin: 60px 0px 0px 0px;
             border-left: 30px solid #fff;
         }
     }
 
-    @include bp800 {
+    @include bp600 {
         width: 50%;
         float: left;
         max-width: none;

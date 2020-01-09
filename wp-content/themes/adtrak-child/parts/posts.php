@@ -8,11 +8,9 @@
             <div class="line"></div>
         </div>
 
-        <?php if (!is_front_page()) : ?>
-
-        <p class="title-full-description">Here is a text area where you can write a brief summary about your vitit to a certain country which will be a nice introduction for the posts which are listed below. You may want to write something about when you visited, the reason for the visit etc. If left blank, this section will simply just not show :).</p>
-
-        <?php endif; ?>
+        <p class="title-full-description">
+            <?php the_field('intro_text'); ?>
+        </p>
 
         <div class="posts">
             <?php $i = 0; 
@@ -56,6 +54,7 @@
                 <style>
                     .post-<?php echo $i; ?> {
                     background-image: url(<?php echo $thumb_url_small; ?>);
+                    background-position: center;
                     }
                     @media (min-width: 600px) {
                         .post-<?php echo $i; ?> {
@@ -92,6 +91,8 @@
             <div class="view-all-btn">
                 <a href="<?php echo site_url(); ?>/posts" class="btn view-all-btn">View All Adventures</a>
             </div>
+
+        <?php elseif ( is_page('destination')) : ?>
 
         <?php else : ?>
 

@@ -134,6 +134,8 @@
         display: flex;
         justify-content: center;
         background: $pink;
+        border-radius: 12px 12px 12px 0px;
+        padding: 10px;
 
         a.page-numbers, span {
             padding: 5px 11px;

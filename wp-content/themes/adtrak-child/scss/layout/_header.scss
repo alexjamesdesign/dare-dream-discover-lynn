@@ -8,6 +8,7 @@ header {
     .header--container {
         height: 250px;
         margin-bottom: -110px;
+        width: 100%;
 
         @include bp800 {
             display: flex;
@@ -15,6 +16,10 @@ header {
             padding: 30px 40px 0px 40px;
             margin: 0;
             height: auto;
+            
+            position: absolute;
+            top: 0;
+            z-index: 10;
         }
 
         a {

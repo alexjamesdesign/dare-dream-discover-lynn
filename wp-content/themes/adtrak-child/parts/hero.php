@@ -64,16 +64,6 @@ Single post
 
 
 
-<?php } elseif (is_search()) {
-
-/* -----------------------------------------------------------------
-Search results
------------------------------------------------------------------ */
-
-?>
-
-
-
 <?php } else {
 
 /* -----------------------------------------------------------------
@@ -120,6 +110,8 @@ Everything else
 				<p class="hero__primary"><?php the_title(); ?></p>
 			<?php elseif (is_post_type_archive('destinations')) : ?>
 				<p class="hero__primary">Destinations.</p>
+			<?php elseif (is_search()) : ?>
+				<p class="hero__primary">Search Results.</p>
 			<?php elseif (taxonomy_exists( $taxonomy )) : ?>
 				<p class="hero__primary"><?php echo strip_tags ( get_the_term_list( get_the_ID(), 'destination_category_taxonomy', "",", " )); ?>.</p>
 			<?php else : ?>

@@ -7,12 +7,17 @@
     background-size: cover;
     background-position: center;
 
+    @include bp800 {
+        margin: 200px 0px 0px 0px;
+    }
+   
+
     &__container {
         position: relative;   
         
         @include bp800 {
             display: flex;
-            min-height: 400px; 
+            min-height: 350px; 
         }
     }
 
@@ -34,7 +39,7 @@
         font-style: normal;
         font-size: 36px;
         @include font-anton-400;
-        padding: 10px 0px 20px 0px;
+        padding: 10px 0px 50px 0px;
 
         @include bp800 {
             font-size: 64px;

@@ -9,12 +9,44 @@
     padding: 20px;
     background: $blanc;
 
+    @include bp600 {
+        text-align: left;
+    }
+
+    .container {
+        @include bp600 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        @include bp800 {
+            justify-content: flex-start;
+        }
+    }
+
     &__explore {
         padding: 0px 0px 0px 0px;
+
+        @include bp600 {
+            padding: 0px 30px 0px 0px;
+        }
+
+        @include bp800 {
+            padding: 0px 0px 0px 30px;
+        }
     }
 
     &__logo {
         padding: 0px 0px 0px 0px;
+        max-width: 200px;
+        margin: 20px auto 30px auto;
+
+        @include bp600 {
+            padding: 0px 30px 0px 0px;
+            margin: 0px 0 0px 0;
+            max-width: 200px;
+        }
 
         @include bp800 {
             padding: 0px 30px 0px 0px;
@@ -48,6 +80,7 @@
         color: $darkblue;
         padding: 3px 0px;
         display: block;
+        @include font-din-400;
     }
 }
 
