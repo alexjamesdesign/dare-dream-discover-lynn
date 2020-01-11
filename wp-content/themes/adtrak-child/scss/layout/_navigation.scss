@@ -31,11 +31,6 @@
         .current-menu-parent a {
             color: $windowsblue;
             background: $lightblue;
-
-            &:hover {
-                color: $blanc;
-            }
-
         }
 
         a {
@@ -48,59 +43,12 @@
             font-weight: 700;
             font-style: normal;
             text-transform: uppercase;
-            border-radius: 10px;
+            border-radius: 12px 12px 12px 0px;
 
             &:hover {
-                color: $noir;
+                color: lighten($windowsblue,15%);
             }
 
-        }
-
-        .sub-menu {
-            position: absolute;
-            background: $blanc;
-            top: 100%;
-            left: 0;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            width: 160px;
-            -webkit-transition: .3s;
-            transition: .3s;
-
-            li {
-                width: 100%;
-                float: left;
-            }
-
-            .current-menu-item > a {
-                color: $blanc;
-                background: $noir;
-            }
-
-            a {
-                color: $noir;
-                display: block;
-                border-bottom: 1px solid rgba(255,255,255,.1);
-
-                &:hover {
-                    color: $noir;
-                }
-
-            }
-
-            &:hover {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-            }
-
-        }
-
-        a:hover + .sub-menu {
-            display: block;
-            opacity: 1;
-            visibility: visible;
         }
 
     }
@@ -123,53 +71,54 @@
 
 // Secondary
 
-.top-bar #menu-secondary-menu {
-    display: none;
-}
+// .top-bar #menu-secondary-menu {
+//     display: none;
+// }
 
-.top-bar #menu-secondary-menu {
+// .top-bar #menu-secondary-menu {
 
-    @include bp800 {
-        clear: both;
-        display: block;
-        text-align: right;
+//     @include bp800 {
+//         clear: both;
+//         display: block;
+//         text-align: right;
 
-        li {
-            display: inline;
-            position: relative;
+//         li {
+//             display: inline;
+//             position: relative;
 
-            &.menu-item-has-children > a:after {
-                content: "\f107";
-                position: absolute;
-                bottom: -15px;
-                left: 50%;
-                margin-left: -8px;
-                font: 1em/1 FontAwesome;
-            }
-        }
+//             &.menu-item-has-children > a:after {
+//                 content: "\f107";
+//                 position: absolute;
+//                 bottom: -15px;
+//                 left: 50%;
+//                 margin-left: -8px;
+//                 font: 1em/1 FontAwesome;
+//             }
+//         }
 
-        .current-menu-item a,
-        .current-menu-parent a {
-            color: $blanc;
-            background: lighten($noir,20);
+//         .current-menu-item a,
+//         .current-menu-parent a {
+//             color: $blanc;
+//             background: lighten($noir,20);
+//             border-radius: 12px 12px 12px 0px;
 
-            &:hover {
-                color: $blanc;
-            }
+//             &:hover {
+//                 color: $blanc;
+//             }
 
-        }
+//         }
 
-        a {
-            display: inline-block;
-            text-decoration: none;
-            color: $noir;
-            padding: 14px 6px;
-            font-size: 1.4rem;
+//         a {
+//             display: inline-block;
+//             text-decoration: none;
+//             color: $noir;
+//             padding: 14px 6px;
+//             font-size: 1.4rem;
 
-            &:hover {
-                color: $noir;
-            }
+//             &:hover {
+//                 color: $noir;
+//             }
 
-        }
-    }
-}
+//         }
+//     }
+// }

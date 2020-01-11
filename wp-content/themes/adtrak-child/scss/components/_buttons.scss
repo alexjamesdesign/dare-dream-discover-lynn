@@ -14,10 +14,11 @@ button, .btn, #nf-field-8 {
     border-radius: 12px 12px 12px 0px;
     
     &:hover {
-        background: $noir;
+        background: lighten($pink,5%);
         color: $blanc;
         border-color: $blanc;
         text-decoration: none;
+        border-radius: 12px 0px 12px 12px;
     }
 
     // Define the 1) button name, 2) text/border color & 3) background color

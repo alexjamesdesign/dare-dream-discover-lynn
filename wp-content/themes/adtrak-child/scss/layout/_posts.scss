@@ -40,6 +40,7 @@
     margin: 40px auto 80px auto;
     max-width: 600px;
     background-position: center;
+    transition: .3s;
 
     @include bp800 {
         min-height: 400px;
@@ -74,6 +75,12 @@
         float: left;
         max-width: none;
     }
+
+    &:hover {
+        .post-name {
+            margin: 0 auto -40px auto;
+        }
+    }
 } 
 
 .destination-name {
@@ -95,10 +102,23 @@
     padding: 15px 25px;
     align-self: flex-end;
     background: #000;
+    position: relative;
     margin: 0 auto -50px auto;
     width: 100%;
     text-align: center;
     text-decoration: none;
+    transition: .3s;
+
+
+    &:after {
+        content: "\f105";
+        margin-left: -8px;
+        font: 1em/1 FontAwesome;
+        color: $blanc;
+        position: absolute;
+        right: 20px;
+        top: 30%;
+    }
 }
 
 .view-all-btn {
