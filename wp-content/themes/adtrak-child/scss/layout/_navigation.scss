@@ -7,7 +7,7 @@
 .desktop-nav {
     display: none;
 
-    @include bp800 {
+    @include bp1000 {
         clear: both;
         display: flex;
         flex-grow: 2;

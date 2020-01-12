@@ -117,9 +117,9 @@
 	
 	<div class="wrapper">
 
-		<?php include locate_template('parts/mobile-top-bar.php'); ?>
-
 		<header>
+
+			<?php include locate_template('parts/mobile-top-bar.php'); ?>
    
 			<div class="container header--container">
 

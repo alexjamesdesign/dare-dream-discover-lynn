@@ -27,10 +27,14 @@
         @include bp800 {
             @include font-anton-400;
             z-index: 2;
-            width: 50%;
+            width: 45%;
             max-width: 690px;
             text-align: left;
             padding: 50px 0px 0px 40px;
+        }
+
+        @include bp1000 {
+            width: 50%;
         }
     }
 
@@ -42,6 +46,11 @@
         padding: 10px 0px 50px 0px;
 
         @include bp800 {
+            font-size: 45px;
+            line-height: 65px;
+        }
+
+        @include bp1000 {
             font-size: 64px;
             line-height: 85px;
         }
@@ -58,9 +67,13 @@
             position: absolute;
             top: 0px;
             right: 0px;
-            width: 500px;
+            width: 470px;
             min-height: 700px;
             margin: 0;
+        }
+
+        @include bp1000 {
+            width: 500px;
         }
 
         @include bp1200 {

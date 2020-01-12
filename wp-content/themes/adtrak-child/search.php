@@ -6,6 +6,7 @@
  * @package AdtrakChild
  * @version 1.0.0
  */
+/* Template Name: Search Page */
 ?>
 
 <?php
@@ -26,15 +27,17 @@
 
 			<?php while (have_posts()): the_post(); ?>
 
-				<?php /* Check if it is a post, not a page - remove this if you want to have site-wide search */ if ( 'post' == get_post_type() ) : ?>
+				<?php /* Check if it is a post, not a page - remove this if you want to have site-wide search */ if ( 'destinations' == get_post_type() ) : ?>
 
 					<article class="post post--overview">						
 						<?php the_post_thumbnail('medium'); ?>
 
-						<?php the_title( sprintf( '<h2><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
-						<?php the_excerpt(); ?>
+						<div class="post--search-text">
+							<?php the_title( sprintf( '<h2><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+							<?php the_excerpt(); ?>
 
-						<a href="<?php the_permalink(); ?>" class="btn btn--noir">Continue reading</a>
+							<a href="<?php the_permalink(); ?>" class="btn btn--pink">Continue reading</a>
+						</div>
 					</article>
 
 				<?php endif; ?>
