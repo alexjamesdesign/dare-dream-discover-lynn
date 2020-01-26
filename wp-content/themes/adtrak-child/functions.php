@@ -321,66 +321,6 @@ add_filter( 'post_type_link', 'wpse_5308_post_type_link', 10, 2 );
 
 
 
-// add_filter('post_link', 'rudr_post_type_permalink', 20, 3);
-// add_filter('post_type_link', 'rudr_post_type_permalink', 20, 3);
- 
-// function rudr_post_type_permalink($permalink, $post_id, $leavename) {
- 
-// 	$post_type_name = 'destinations'; // post type name, you can find it in admin area or in register_post_type() function
-// 	$post_type_slug = 'destinations'; // the part of your product URLs, not always matches with the post type name
-// 	$tax_name = 'destination-categories'; // the product categories taxonomy name
- 
-// 	$post = get_post( $post_id );
- 
-// 	if ( strpos( $permalink, $post_type_slug ) === FALSE || $post->post_type != $post_type_name ) // do not make changes if the post has different type or its URL doesn't contain the given post type slug
-// 		return $permalink;
- 
-//         $terms = wp_get_object_terms( $post->ID, $tax_name ); // get all terms (product categories) of this post (product)
- 
- 
-//         if ( !is_wp_error( $terms ) && !empty( $terms ) && is_object( $terms[0] ) ) // rewrite only if this product has categories
-//         	$permalink = str_replace( $post_type_slug, $terms[0]->slug, $permalink );
- 
-// 	return $permalink;
-// }
- 
- 
-// add_filter('request', 'rudr_post_type_request', 1, 1 );
- 
-// function rudr_post_type_request( $query ){
-// 	global $wpdb;
- 
-// 	$post_type_name = 'product'; // specify your own here
-// 	$tax_name = 'product_cat'; // and here
- 
-// 	$slug = $query['attachment']; // when we change the post type link, WordPress thinks that these are attachment pages
- 
-// 	// get the post with the given type and slug from the database
-// 	$post_id = $wpdb->get_var(
-// 		"
-// 		SELECT ID
-// 		FROM $wpdb->posts
-// 		WHERE post_name = '$slug'
-// 		AND post_type = '$post_type_name'
-// 		"
-// 	);
- 
-// 	$terms = wp_get_object_terms( $post_id, $tax_name ); // our post should have the terms
- 
- 
-// 	if( isset( $slug ) && $post_id && !is_wp_error( $terms ) && !empty( $terms ) ) : // change the query
- 
-// 		unset( $query['attachment'] );
-// 		$query[$post_type_name] = $slug;
-// 		$query['post_type'] = $post_type_name;
-// 		$query['name'] = $slug;
- 
-// 	endif;
- 
-// 	return $query;
-// }
-
-
 /* ========================================================================================================================
     
 Pagination
@@ -411,3 +351,15 @@ function misha_my_load_more_scripts() {
 }
  
 add_action( 'wp_enqueue_scripts', 'misha_my_load_more_scripts' );
+
+/* ========================================================================================================================
+    
+Admin Menu Customization
+    
+======================================================================================================================== */
+
+function remove_menus(){
+  remove_menu_page( 'edit.php' );
+}
+
+add_action( 'admin_menu', 'remove_menus' );
