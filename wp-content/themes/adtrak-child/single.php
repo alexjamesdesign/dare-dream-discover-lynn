@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<div class="container site-content__container">
+		<div class="container site-content__container site-content__container--single">
 			<article class="copy">				
 				<?php the_title('<h1>', '</h1>'); ?>
 				<?php the_content(); ?>

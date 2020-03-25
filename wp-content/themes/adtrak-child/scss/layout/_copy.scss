@@ -2,7 +2,11 @@
     Copy
 --------------------------------------------------------------- */
 
-
+.site-content--single {
+    .container {
+        display: flex;
+    }
+}
 
 .site-content {
     padding: 20px 0;

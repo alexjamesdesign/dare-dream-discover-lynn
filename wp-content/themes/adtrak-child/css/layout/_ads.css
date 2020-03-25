@@ -3,4 +3,6 @@
 --------------------------------------------------------------- */
 .remarket {
   position: -webkit-sticky;
-  position: sticky; }
+  position: sticky;
+  top: 0;
+  padding: 20px 0px 0px 0px; }
