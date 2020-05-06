@@ -4,7 +4,9 @@
 
 .site-content--single {
     .container {
-        display: flex;
+        @include bp800 {
+            display: flex;
+        }
     }
 }
 
