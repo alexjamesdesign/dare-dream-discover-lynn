@@ -32,7 +32,8 @@ wp-content/themes/*
 .*
 ~*
 
-# ignore node dependency directories (used by grunt)
+# ignore node dependency directories
+wp-content/themes/**/package-lock.json
 node_modules/
 wp-content/themes/**/node_modules/**
 wp-content/themes/**/node_modules/*

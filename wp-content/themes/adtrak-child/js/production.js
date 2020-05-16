@@ -1,2 +1,2 @@
-// @prepros-prepend "scripts/jquery.fancybox.js";
-// @prepros-prepend "scripts/run.js"
+import "./scripts/jquery.fancybox.js"
+import "./scripts/run.js"
