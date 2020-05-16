@@ -34,6 +34,8 @@ wp-content/themes/*
 
 # ignore node dependency directories (used by grunt)
 node_modules/
+wp-content/themes/**/node_modules/**
+wp-content/themes/**/node_modules/*
 
 # ignore OS generated files
 ehthumbs.db
