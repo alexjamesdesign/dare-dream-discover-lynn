@@ -104,6 +104,8 @@
 	      s.parentNode.insertBefore(wf, s);
 	   })(document);
 	</script>
+	
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2038793372992120" crossorigin="anonymous"></script>
 
 </head>
 
