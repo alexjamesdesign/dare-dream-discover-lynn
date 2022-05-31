@@ -193,7 +193,10 @@ final class NF_MergeTags_Fields extends NF_Abstracts_MergeTags
 
 	    $value = apply_filters('ninja_forms_merge_tag_value_' . $field['type'], $field['value'], $field);
 
-	    $this->add( $callback, $field['id'], '{field:' . $field['id'] . '}', $value, false, ('html' !== $field['type']) );
+        $safe = apply_filters('ninja_forms_get_html_safe_fields',
+            array( 'html' ) );
+        $sanitize = (! in_array($field['type'], $safe));
+	    $this->add( $callback, $field['id'], '{field:' . $field['id'] . '}', $value, false, $sanitize );
 
         if( isset( $field[ 'key' ] ) ) {
             $field_key =  $field[ 'key' ];
@@ -201,17 +204,15 @@ final class NF_MergeTags_Fields extends NF_Abstracts_MergeTags
 
             // Add Field Key Callback
             $callback = 'field_' . $field_key;
-            $this->add( $callback, $field_key, '{field:' . $field_key . '}', $value, $calc_value );
+            $this->add( $callback, $field_key, '{field:' . $field_key . '}', $value, $calc_value, $sanitize );
 
             // Add Field by Key for All Fields
             $this->merge_tags[ 'all_fields_by_key' ][ 'fields' ][ $field_key ] = $field;
 
             // Add Field Calc Callabck
             if( '' == $calc_value ) $calc_value = '0';
-            //var_dump($calc_value);
-            //echo('myspace');
             $callback = 'field_' . $field_key . '_calc';
-            $this->add( $callback, $field_key, '{field:' . $field_key . ':calc}', $calc_value, $calc_value );
+            $this->add( $callback, $field_key, '{field:' . $field_key . ':calc}', $calc_value, $calc_value, $sanitize );
 
 
             /*
@@ -260,6 +261,9 @@ final class NF_MergeTags_Fields extends NF_Abstracts_MergeTags
         $field[ 'options' ] = apply_filters( 'ninja_forms_render_options', $field[ 'options' ], $field );
         $field[ 'options' ] = apply_filters( 'ninja_forms_render_options_' . $field['type'], $field[ 'options' ], $field );
 	    $field[ 'options' ] = apply_filters( 'ninja_forms_localize_list_labels', $field[ 'options' ], $field, $this->form_id );
+        if( empty( $field['options'] ) ) {
+            return $field['value'];
+        }
         foreach( $field[ 'options' ] as $options ) {
             // ...checks to see if our list has multiple values.
             if( is_array( $field[ 'value' ] ) ) {
@@ -286,6 +290,7 @@ final class NF_MergeTags_Fields extends NF_Abstracts_MergeTags
      * @param $tag
      * @param $value
      * @param bool $calc_value
+     * @param bool $sanitize
      */
 	public function add( $callback, $id, $tag, $value, $calc_value = false, $sanitize = true )
 	{
@@ -308,7 +313,9 @@ final class NF_MergeTags_Fields extends NF_Abstracts_MergeTags
 
     public function maybe_sanitize( $field )
     {
-        if ( 'html' !== $field['type'] && $this->use_safe ) {
+        $safe = apply_filters( 'ninja_forms_get_html_safe_fields',
+            array( 'html' ) );
+        if ( ! in_array( $field['type'], $safe ) && $this->use_safe ) {
             $field['value'] = strip_tags($field['value']);
         }
         return $field;
