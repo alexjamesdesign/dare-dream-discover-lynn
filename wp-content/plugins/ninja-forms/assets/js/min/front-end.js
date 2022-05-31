@@ -488,7 +488,7 @@ define( 'models/fieldModel',['models/fieldErrorCollection'], function( fieldErro
 			nfRadio.channel( this.get( 'type' ) ).trigger( 'init:model', this );
 			nfRadio.channel( 'fields-' + this.get( 'type' ) ).trigger( 'init:model', this );
 
-			if( 'undefined' != this.get( 'parentType' ) ){
+			if( 'undefined' != typeof this.get( 'parentType' ) ){
 				nfRadio.channel( this.get( 'parentType' ) ).trigger( 'init:model', this );
 			}
 
@@ -550,6 +550,18 @@ define( 'models/fieldModel',['models/fieldErrorCollection'], function( fieldErro
 		beforeSubmit: function( formModel ) {
 			nfRadio.channel( this.get( 'type' ) ).trigger( 'before:submit', this );
 			nfRadio.channel( 'fields' ).trigger( 'before:submit', this );
+		},
+
+		/**
+		 * Return the value of this field.
+		 * This method exists so that more complex fields can return more than just the field value.
+		 * Those advanced fields should create their own method with this name.
+		 * 
+		 * @since  3.5
+		 * @return {string} Value of this field.
+		 */
+		getValue: function() {
+			return this.get( 'value' );
 		}
 
 	} );
@@ -807,6 +819,11 @@ define('controllers/formData',['models/formModel', 'models/formCollection', 'mod
 					model = form.get( 'fields' ).get( id );	
 				}			
 			} );
+
+			if(typeof model == "undefined"){
+				model = nfRadio.channel( "field-repeater" ).request( 'get:repeaterFieldById', id );
+			}
+			
 			return model;
 		}
 	});
@@ -839,9 +856,9 @@ define('controllers/fieldError',['models/fieldErrorModel'], function( fieldError
 			var model = nfRadio.channel( 'fields' ).request( 'get:field', targetID );
 
 			if( 'undefined' == typeof model ) return;
-
 			var errors = model.get( 'errors' );
 			var targetError = errors.get( id );
+
 			if ( 'undefined' != typeof targetError ) {
 				errors.remove( targetError );
 				model.set( 'errors', errors );
@@ -1032,6 +1049,8 @@ define('controllers/changeDate',[], function() {
 			this.listenTo( radioChannel, 'change:modelValue', this.onChangeModelValue );
 			this.listenTo( radioChannel, 'keyup:field', this.dateKeyup );
 			this.listenTo( radioChannel, 'blur:field', this.onBlurField );
+			
+			this.listenTo( radioChannel, 'change:extra', this.changeHoursMinutes, this)
 		},
 
 		onChangeModelValue: function( model ) {
@@ -1049,6 +1068,11 @@ define('controllers/changeDate',[], function() {
 
 			if( 'default' === format) {
 				format = nfi18n.dateFormat;
+			}
+
+			// If we are dealing with purely a time field, bail early.
+			if ( 'time_only' == model.get( 'date_mode' ) ) {
+				return false;
 			}
 
 			if ( 0 < value.length ) {
@@ -1127,6 +1151,22 @@ define('controllers/changeDate',[], function() {
 				model.addWrapperClass( 'nf-pass' );
 				model.set( 'clean', false );
 			}
+		},
+
+		changeHoursMinutes: function( e, fieldModel ) {
+			let type = '';
+			let container = jQuery( e.target ).closest( '.nf-field-element' );
+
+			// Set our hour, minute, and ampm
+			let selected_hour = jQuery( container ).find( '.hour' ).val();
+			let selected_minute = jQuery( container ).find( '.minute' ).val();
+			let selected_ampm = jQuery( container ).find( '.ampm' ).val();
+
+			fieldModel.set( 'selected_hour', selected_hour );
+			fieldModel.set( 'selected_minute', selected_minute );
+			fieldModel.set( 'selected_ampm', selected_ampm );
+			// Trigger a change on our model.
+			fieldModel.trigger( 'change:value', fieldModel );
 		}
 	});
 
@@ -3435,10 +3475,46 @@ define('controllers/fieldDate',[], function() {
     var controller = Marionette.Object.extend({
 
         initialize: function () {
+            this.listenTo( nfRadio.channel( 'date' ), 'init:model', this.registerFunctions );
             this.listenTo( nfRadio.channel( 'date' ), 'render:view', this.initDatepicker );
         },
 
+        registerFunctions: function( model ) {
+            model.set( 'renderHourOptions', this.renderHourOptions );
+            model.set( 'renderMinuteOptions', this.renderMinuteOptions );
+            model.set( 'maybeRenderAMPM', this.maybeRenderAMPM );
+            model.set( 'customClasses', this.customClasses );
+            // Overwrite the default getValue() method.
+            model.getValue = this.getValue;
+        },
+
+        renderHourOptions: function() {
+            return this.hours_options;
+        },
+
+        renderMinuteOptions: function() {
+            return this.minutes_options;
+        },
+
+        maybeRenderAMPM: function() {
+            if ( 'undefined' == typeof this.hours_24 || 1 == this.hours_24 ) {
+                return;
+            }
+
+            return '<div style="float:left;"><select class="ampm extra"><option value="am">AM</option><option value="pm">PM</option></select></div>';
+        },
+
         initDatepicker: function ( view ) {
+            view.model.set( 'el', view.el );
+            var el = jQuery( view.el ).find( '.nf-element' )[0];
+            view.listenTo( nfRadio.channel( 'form-' + view.model.get( 'formID' ) ), 'before:submit', this.beforeSubmit, view );
+
+            // If we are using a time_only date_mode, then hide the date input.
+            if ( 'undefined' != typeof view.model.get( 'date_mode' ) && 'time_only' == view.model.get( 'date_mode' ) ) {
+                jQuery( el ).hide();
+                return false;
+            }
+
             var dateFormat = view.model.get( 'date_format' );
     
             // For "default" date format, convert PHP format to JS compatible format.
@@ -3446,14 +3522,13 @@ define('controllers/fieldDate',[], function() {
                 dateFormat = this.convertDateFormat( nfi18n.dateFormat );
             }
 
-            var el = jQuery( view.el ).find( '.nf-element' )[0];
             var dateSettings = {
                 classes: jQuery( el ).attr( "class" ),
                 placeholder: view.model.get( 'placeholder' ),
-                parseDate: (datestr, format) => {
+                parseDate: function (datestr, format) {
                     return moment(datestr, format, true).toDate();
                 },
-                formatDate: (date, format, locale) => {
+                formatDate: function (date, format, locale) {
                     return moment(date).format(format);
                 },
                 dateFormat: dateFormat,
@@ -3461,6 +3536,7 @@ define('controllers/fieldDate',[], function() {
                 altInput: true,
                 ariaDateFormat: dateFormat,
                 mode: "single",
+                allowInput: true,
                 disableMobile: "true",
                 locale: {
                     months: {
@@ -3473,18 +3549,51 @@ define('controllers/fieldDate',[], function() {
                     },
                     firstDayOfWeek: nfi18n.startOfWeek,
                 }
-            };
+            }; 
            
+            // Filter our datepicker settings object.
+            let filteredDatePickerSettings = nfRadio.channel( 'flatpickr' ).request( 'filter:settings', dateSettings, view );
+            if ( 'undefined' != typeof filteredDatePickerSettings ) {
+                dateSettings = filteredDatePickerSettings;
+            }
+
             var dateObject = flatpickr( el, dateSettings );
 
             if ( 1 == view.model.get( 'date_default' ) ) {
                 dateObject.setDate( moment().format(dateFormat) );
+                view.model.set( 'value', moment().format(dateFormat) );
             }
 
             //Trigger Pikaday backwards compatibility
-            nfRadio.channel( 'pikaday-bc' ).trigger( 'init', dateObject, view.model );
+            nfRadio.channel( 'pikaday-bc' ).trigger( 'init', dateObject, view.model, view );
 
-            nfRadio.channel( 'flatpickr' ).trigger( 'init', dateObject, view.model );
+            nfRadio.channel( 'flatpickr' ).trigger( 'init', dateObject, view.model, view );
+        },
+
+        beforeSubmit: function( formModel ) {
+            if ( 'date_only' == this.model.get( 'date_mode' ) ) {
+                return false;
+            }
+            let hour = jQuery( this.el ).find( '.hour' ).val();
+            let minute = jQuery( this.el ).find( '.minute' ).val();
+            let ampm = jQuery( this.el ).find( '.ampm' ).val();
+            let current_value = this.model.get( 'value' );
+            let date = false;
+
+            if ( _.isObject( current_value ) ) {
+                date = current_value.date;
+            } else {
+                date = current_value;
+            }
+
+            let date_value = {
+                date: date,
+                hour: hour,
+                minute: minute,
+                ampm: ampm,
+            };
+
+            this.model.set( 'value', date_value );
         },
 
         getYearRange: function( fieldModel ) {
@@ -3585,6 +3694,60 @@ define('controllers/fieldDate',[], function() {
             dateFormat = dateFormat.replace( 'u', '' );
 
             return dateFormat;
+        },
+
+        customClasses: function( classes ) {
+            if ( 'date_and_time' == this.date_mode ) {
+                classes += ' date-and-time';
+            }
+            return classes;
+        },
+
+        // This function is called whenever we want to know the value of the date field.
+        // Since it could be a date/time field, we can't return just the value.
+        getValue: function() {
+
+            if ( 'date_only' == this.get( 'date_mode' ) ) {
+                return this.get( 'value' );
+            }
+
+            let el = this.get( 'el' );
+            let hour = jQuery( el ).find( '.hour' ).val();
+            let minute = jQuery( el ).find( '.minute' ).val();
+            let ampm = jQuery( el ).find( '.ampm' ).val();
+            let current_value = this.get( 'value' );
+            let date = false;
+
+            if ( _.isObject( current_value ) ) {
+                date = current_value.date;
+            } else {
+                date = current_value;
+            }
+
+            let value = '';
+
+            if ( 'undefined' != typeof date ) {
+                value += date;
+            }
+
+            if ( 'undefined' != typeof hour && 'undefined' != typeof minute ) {
+                value += ' ' + hour + ':' + minute;
+            }
+
+            if ( 'undefined' != typeof ampm ) {
+                value += ' ' + ampm;
+            }
+
+            return value;
+
+            // let date_value = {
+            //     date: date,
+            //     hour: hour,
+            //     minute: minute,
+            //     ampm: ampm,
+            // };
+
+            // this.model.set( 'value', date_value );
         }
     });
 
@@ -3620,6 +3783,29 @@ define('controllers/fieldRecaptcha',[], function() {
 				recaptchaID++;
 			} );
         }
+    });
+
+    return controller;
+} );
+define('controllers/fieldRecaptchaV3',[], function() {
+    var controller = Marionette.Object.extend({
+
+        initialize: function () {
+            this.listenTo( nfRadio.channel( 'recaptcha_v3' ), 'init:model', this.initRecaptcha  );
+        },
+
+       	initRecaptcha: function ( model ) {
+	        let formID = model.get( 'formID' );
+	        nfRadio.channel( 'form-' + formID ).trigger( 'disable:submit', model );
+	        grecaptcha.ready( function() {
+		        grecaptcha.execute( model.get( 'site_key' ), {
+			        action: 'register'
+		        } ).then( function( token ) {
+			        model.set( 'value', token );
+			        nfRadio.channel( 'form-' + formID ).trigger( 'enable:submit', model );
+		        } );
+	        } );
+        },
     });
 
     return controller;
@@ -3684,7 +3870,7 @@ define('controllers/fieldHTML',[], function() {
 	               */
                     value = value.replace( mergeTag, "<span data-key=\"field:"
                         + fieldModel.get( 'key' ) + "\">"
-                        + fieldModel.get( 'value' ) + "</span>" );
+                        + fieldModel.getValue() + "</span>" );
                }, this ) ;
                htmlFieldModel.set( 'value', value );
                htmlFieldModel.trigger( 'reRender' );
@@ -4199,9 +4385,9 @@ define( 'views/fieldItem',[], function() {
 
 					var thousands_sep = form.get( 'thousands_sep' );
 					/*
-					 * TODO: if we have a &nbsp; , replace it with a string with a space.
+					 * TODO: if we have a &nbsp; , replace it with a string with a space
 					 */
-					if ( '&nbsp;' == thousands_sep ) {
+					if ( '&nbsp;' == thousands_sep || 160==thousands_sep.charCodeAt(0) ) {
 						thousands_sep = ' ';
 					}
 					var currencySymbol = jQuery( '<div/>' ).html( form.get( 'currencySymbol' ) ).text();
@@ -4247,6 +4433,7 @@ define( 'views/fieldItem',[], function() {
 						}
 					} );
 					var template = nfRadio.channel( 'app' ).request( 'get:template',  '#tmpl-nf-field-' + tmpl );
+					
 					return template( this );
 				},
 
@@ -4317,7 +4504,7 @@ define( 'views/fieldItem',[], function() {
 					if ( 'undefined' != typeof this.customClasses ) {
 						classes = this.customClasses( classes );
 					}
-
+					
 					return classes;
 				},
 
@@ -4442,7 +4629,14 @@ define( 'views/fieldItem',[], function() {
 					var form = nfRadio.channel( 'app' ).request( 'get:form', that.model.get( 'formID' ) );
 					var currency_symbol = form.get( 'settings' ).currency_symbol;
 					return currency_symbol + formattedNumber;
-				}
+				},
+
+				maybeRenderTime: function() {
+					if ( 'time_only' == this.date_mode || 'date_and_time' == this.date_mode ) {
+						return true;
+					}
+					return false;
+				},
 			};
 		},
 
@@ -4451,6 +4645,7 @@ define( 'views/fieldItem',[], function() {
 			'keyup .nf-element': 'fieldKeyup',
 			'click .nf-element': 'fieldClick',
 			'click .extra': 'extraClick',
+			'change .extra': 'extraChange',
 			'blur .nf-element': 'fieldBlur'
 		},
 
@@ -4478,6 +4673,12 @@ define( 'views/fieldItem',[], function() {
 			nfRadio.channel( 'field-' + this.model.get( 'id' ) ).trigger( 'click:extra', e, this.model );
 			nfRadio.channel( this.model.get( 'type' ) ).trigger( 'click:extra', e, this.model );
 			nfRadio.channel( 'fields' ).trigger( 'click:extra', e, this.model );
+		},
+
+		extraChange: function( e ) {
+			nfRadio.channel( 'field-' + this.model.get( 'id' ) ).trigger( 'change:extra', e, this.model );
+			nfRadio.channel( this.model.get( 'type' ) ).trigger( 'change:extra', e, this.model );
+			nfRadio.channel( 'fields' ).trigger( 'change:extra', e, this.model );
 		},
 
 		fieldBlur: function( e ) {
@@ -4634,7 +4835,7 @@ define( 'views/afterField',['views/fieldErrorCollection', 'views/inputLimit'], f
 
     return view;
 } );
-define( 'views/fieldLayout',['views/fieldItem', 'views/beforeField', 'views/afterField'], function( fieldItem, beforeField, afterField ) {
+define( 'views/fieldRepeaterFieldLayout',['views/fieldItem', 'views/beforeField', 'views/afterField'], function( fieldItem, beforeField, afterField ) {
 
     var view = Marionette.LayoutView.extend({
         tagName: 'nf-field',
@@ -4660,7 +4861,7 @@ define( 'views/fieldLayout',['views/fieldItem', 'views/beforeField', 'views/afte
         onRender: function() {
             if ( this.model.get( 'visible' ) ) {
                 this.beforeField.show( new beforeField( { model: this.model } ) );
-                this.field.show( new fieldItem( { model: this.model } ) );
+                this.field.show( new fieldItem( { model: this.model } ) ); 
                 this.afterField.show( new afterField( { model: this.model } ) );
             }
         },
@@ -4684,6 +4885,152 @@ define( 'views/fieldLayout',['views/fieldItem', 'views/beforeField', 'views/afte
                     if( this.type !== this.parentType ) {
                         containerClass += ' ' + this.parentType + '-container';
                     }
+                    return containerClass;
+                }
+            }
+        }
+    });
+
+    return view;
+} );
+
+define( 'views/fieldRepeaterFieldCollection',['views/fieldRepeaterFieldLayout'], function( fieldLayout ) {
+	var view = Marionette.CollectionView.extend({
+		tagName: 'nf-fields-wrap',
+		childView: fieldLayout,
+	});
+
+	return view;
+} );
+define( 'views/fieldRepeaterSetLayout',[ 'views/fieldRepeaterFieldCollection' ], function( fieldCollection ) {
+    var view = Marionette.LayoutView.extend({
+        tagName: 'fieldset',
+        template: '#tmpl-nf-field-repeater-set',
+
+        regions: {
+            fields: '.nf-repeater-fieldset',
+        },
+
+        onRender: function() {
+            this.fields.show( new fieldCollection( { collection: this.model.get( 'fields' ) } ) );
+        },
+
+        events: {
+            'click .nf-remove-fieldset': 'removeSet',
+        },
+
+        removeSet: function() {
+            nfRadio.channel( "field-repeater" ).trigger( 'remove:fieldset',  this.model )
+        }
+
+    });
+
+    return view;
+} );
+define( 'views/fieldRepeaterSetCollection',['views/fieldRepeaterSetLayout'], function( repeaterSetLayout ) {
+	var view = Marionette.CollectionView.extend({
+		tagName: 'div',
+		childView: repeaterSetLayout,
+	});
+
+	return view;
+} );
+define( 'views/fieldRepeaterLayout',[ 'views/fieldRepeaterSetCollection' ], function( repeaterSetCollection ) {
+
+    var view = Marionette.LayoutView.extend({
+        tagName: 'div',
+        template: '#tmpl-nf-field-repeater',
+
+        regions: {
+            sets: '.nf-repeater-fieldsets',
+        },
+
+        initialize: function() {
+
+            this.collection = this.model.get( 'sets' );
+
+            nfRadio.channel( 'field-repeater' ).on( 'rerender:fieldsets', this.render, this );
+
+            this.listenTo( nfRadio.channel( 'form-' + this.model.get( 'formID' ) ), 'before:submit', this.beforeSubmit );
+
+        },
+
+        onRender: function() { 
+            this.sets.show( new repeaterSetCollection( { collection: this.collection } ) );
+        },
+
+        events: {
+            'click .nf-add-fieldset': 'addSet'
+        },
+
+        addSet: function( e ) {
+            nfRadio.channel( 'field-repeater' ).trigger( 'add:fieldset', e );       
+        },
+
+        beforeSubmit: function() {
+			this.collection.beforeSubmit( this.model.get( 'sets' ) );
+		}
+        
+
+    });
+
+    return view;
+} );
+define( 'views/fieldLayout',['views/fieldItem', 'views/beforeField', 'views/afterField', 'views/fieldRepeaterLayout'], function( fieldItem, beforeField, afterField, repeaterFieldLayout ) {
+
+    var view = Marionette.LayoutView.extend({
+        tagName: 'nf-field',
+
+        regions: {
+            beforeField: '.nf-before-field',
+            field: '.nf-field',
+            afterField: '.nf-after-field',
+        },
+
+        initialize: function() {
+            this.listenTo( this.model, 'change:visible', this.render, this );
+        },
+
+        getTemplate: function() {
+            if ( this.model.get( 'visible' ) ) {
+                return '#tmpl-nf-field-layout';
+            } else {
+                return '#tmpl-nf-empty';
+            }
+        },
+
+        onRender: function() {
+            if ( this.model.get( 'visible' ) ) {
+                this.beforeField.show( new beforeField( { model: this.model } ) );
+                if ( 'repeater' == this.model.get( 'type' ) ) {
+                    this.field.show( new repeaterFieldLayout( { model: this.model } ) );
+                } else {
+                    this.field.show( new fieldItem( { model: this.model } ) ); 
+                }
+                this.afterField.show( new afterField( { model: this.model } ) );
+            }
+        },
+
+        templateHelpers: function() {
+            return {
+                renderContainerClass: function() {
+                    var containerClass = ' label-' + this.label_pos + ' ';
+                    // If we have a description position, add that to our container.
+                    if ( 'undefined' != typeof this.desc_pos ) {
+                        containerClass += 'desc-' + this.desc_pos + ' ';
+                    }
+                    // if we have a container_class field setting, add that to our container.
+                    if ( 'undefined' != typeof this.container_class && 0 < jQuery.trim( this.container_class ).length ) {
+                        containerClass += this.container_class + ' ';
+                    }
+
+                    //check if the parent type and type are different. If
+                    // so, add parent type container styling
+                    
+                    if( this.type !== this.parentType ) {
+                        containerClass += ' ' + this.parentType + '-container';
+                    }
+
                     return containerClass;
                 }
             }
@@ -5076,6 +5423,165 @@ define('controllers/uniqueFieldError',[], function() {
 
 	return controller;
 } );
+define( 'models/fieldRepeaterSetModel',[], function() {
+	var model = Backbone.Model.extend( {
+
+		initialize: function(fieldsets, options) {
+
+			this.repeaterFieldModel = options.repeaterFieldModel;
+
+			this.set( 'label', this.repeaterFieldModel.get('label') );
+
+			nfRadio.channel( "field-repeater" ).reply( 'reset:repeaterFieldsets', this.resetRepeaterFieldsets, this );
+			nfRadio.channel( "field-repeater" ).reply( 'get:repeaterFieldsets', this.getRepeaterFieldsets, this );
+			nfRadio.channel( "field-repeater" ).reply( 'get:repeaterFields', this.getRepeaterFields, this );
+			nfRadio.channel( "field-repeater" ).reply( 'get:repeaterFieldById', this.getRepeaterFieldById, this );
+			
+		},
+
+		resetRepeaterFieldsets: function( models) {
+			this.collection = {};
+			this.collection.models = models;
+		},
+
+		getRepeaterFieldsets: function() {
+			return this.collection.models;
+		},
+
+		getRepeaterFields: function() {
+			let fieldsets = this.getRepeaterFieldsets();
+			if(fieldsets.length <= 0 ) return;
+
+			let fields = [];
+			_.each(fieldsets, function(fieldset){
+				const inFields = fieldset.get('fields');
+				
+				_.each( inFields.models, function( field ){
+					fields.push( field );
+				});
+			});
+			return fields;
+		},
+
+		getRepeaterFieldById: function( id ){
+			let fields = this.getRepeaterFields();
+			if(fields.length <= 0 ) return;
+
+			let model;
+			_.each(fields, function(field){
+				if( field.id === id ){
+					model = field;
+				}
+			});
+			return model;
+		}
+
+	} );
+
+	return model;
+} );
+
+define( 'models/fieldRepeaterSetCollection',['models/fieldRepeaterSetModel', 'models/fieldCollection' ], function( repeaterSetModel, fieldCollection ) {
+	var collection = Backbone.Collection.extend( {
+		model: repeaterSetModel,
+
+		initialize: function( models, options ) {
+			this.options = options;
+		
+			nfRadio.channel( "field-repeater" ).on( 'sort:fieldsets', this.sortIDs, this);
+			nfRadio.channel( "field-repeater" ).on( 'remove:fieldset', this.removeSet, this );
+			nfRadio.channel( "field-repeater" ).on( 'add:fieldset', this.addSet, this );
+
+		},
+
+		addSet: function(e) {
+			//Get correct Field Model in case of multiple Repeater fields use
+			const repeaterFieldID = jQuery(e.target).prev(".nf-repeater").data("field-id");
+			const repeaterFieldModel = this.options.repeaterFieldModel.id === repeaterFieldID ? this.options.repeaterFieldModel : undefined;
+
+			if(repeaterFieldModel !== undefined){
+				//Create a new collection
+				let fields = new fieldCollection( this.options.templateFields, { formModel: this.options.formModel, repeaterFieldModel: repeaterFieldModel } );
+				//Add it th sets of collection
+				this.add( { fields: fields }, {repeaterFieldModel: repeaterFieldModel } );
+				//reset all fields IDs
+				this.sortIDs();
+			}
+			
+		},
+
+		removeSet: function( fieldset ) {
+			//Remove the fieldset
+			this.remove( fieldset );
+			//reset all fields IDs
+			this.sortIDs();
+		},
+
+		sortIDs: function(){
+			nfRadio.channel( "field-repeater" ).request( 'reset:repeaterFieldsets', this.models );
+			//Reset repeater fields IDs when adding / removing a field
+			_.each(this.models, function(fieldset, modelIndex){
+				let fields = fieldset.get('fields');
+				fieldset.set( 'index', modelIndex + 1 );
+				_.each( fields.models, function( field ) {
+					//Remove suffix if it has one
+					cutEl = String(field.id).split('_')[0];
+					//Update Suffix using fieldset index
+					field.set("id", cutEl + "_" + modelIndex);					
+				});
+			});
+			//Reload repeater field view ( collection of fieldsets updated )
+			nfRadio.channel( 'field-repeater' ).trigger( 'rerender:fieldsets' );
+		},
+
+		beforeSubmit: function( sets ) {
+			//Collect values of all fields in the repeater and create repeaterFieldValue object
+			let fieldsetCollection = sets.models;
+			if(fieldsetCollection.length > 0){
+				let repeaterFieldValue = {};
+				//Loop through fieldsets
+				_.each( fieldsetCollection, function( fieldset ){
+					let fields = fieldset.get('fields');
+					//Loop through fields in each fieldsets
+					_.each( fields.models, function( field ){
+						//Get ID and Value to format and store them in the repeaterFieldValue object
+						let value = field.get('value');
+						let id = field.get('id');
+						repeaterFieldValue[id] = {
+							"value": value,
+							"id": id
+						}
+					});
+				});
+				//Update repeater field value with repeaterFieldValue 
+				nfRadio.channel( 'nfAdmin' ).request( 'update:field', this.options.repeaterFieldModel, repeaterFieldValue);
+			}
+
+		},
+
+	} );
+	return collection;
+} );
+define('controllers/fieldRepeater',[ 'models/fieldRepeaterSetCollection', 'models/fieldCollection' ], function( repeaterSetCollection, fieldCollection ) {
+    var controller = Marionette.Object.extend({
+
+        initialize: function () {
+            this.listenTo( nfRadio.channel( 'repeater' ), 'init:model', this.initRepeater );
+        },
+
+        initRepeater: function ( model ) {
+        	if ( 'undefined' == typeof model.collection.options.formModel ) {
+        		return false;
+        	}
+
+        	let fields = new fieldCollection( model.get( 'fields' ), { formModel: model.collection.options.formModel } );
+        	model.set( 'sets', new repeaterSetCollection( [ { fields: fields } ], { templateFields: model.get( 'fields' ), formModel: model.collection.options.formModel, repeaterFieldModel: model } ) );
+        },
+
+    });
+
+    return controller;
+});
 define(
 	'controllers/loadControllers',[
 		'controllers/formData',
@@ -5107,6 +5613,7 @@ define(
 		'controllers/dateBackwardsCompat',
 		'controllers/fieldDate',
 		'controllers/fieldRecaptcha',
+		'controllers/fieldRecaptchaV3',
 		'controllers/fieldHTML',
 		'controllers/helpText',
 		'controllers/fieldTextbox',
@@ -5118,7 +5625,8 @@ define(
 		'controllers/formErrors',
 		'controllers/submit',
 		'controllers/defaultFilters',
-		'controllers/uniqueFieldError'
+		'controllers/uniqueFieldError',
+		'controllers/fieldRepeater',
 	],
 	function(
 		FormData,
@@ -5150,6 +5658,7 @@ define(
 		DateBackwardsCompat,
 		FieldDate,
 		FieldRecaptcha,
+		FieldRecaptchaV3,
 		FieldHTML,
 		HelpText,
 		FieldTextbox,
@@ -5161,7 +5670,8 @@ define(
 		FormErrors,
 		Submit,
 		DefaultFilters,
-		UniqueFieldError
+		UniqueFieldError,
+		FieldRepeater
 	) {
 		var controller = Marionette.Object.extend( {
 			initialize: function() {
@@ -5186,6 +5696,7 @@ define(
 				new FieldTotal();
 				new FieldQuantity();
 				new FieldRecaptcha();
+				new FieldRecaptchaV3();
 				new FieldHTML();
 				new HelpText();
 				new FieldTextbox();
@@ -5194,6 +5705,8 @@ define(
 				new FieldTerms();
 				new FormContentFilters();
 				new UniqueFieldError();
+				new FieldRepeater();
+				
 				/**
 				 * Misc controllers
 				 */

@@ -3,7 +3,7 @@
 Plugin Name: Ninja Forms
 Plugin URI: http://ninjaforms.com/?utm_source=Ninja+Forms+Plugin&utm_medium=readme
 Description: Ninja Forms is a webform builder with unparalleled ease of use and features.
-Version: 3.4.33
+Version: 3.6.9
 Author: Saturday Drive
 Author URI: http://ninjaforms.com/?utm_source=Ninja+Forms+Plugin&utm_medium=Plugins+WP+Dashboard
 Text Domain: ninja-forms
@@ -32,16 +32,12 @@ function ninja_forms_three_table_exists(){
 
 if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf2to3' ] ) && ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) ){
 
-    include 'deprecated/ninja-forms.php';
+    require_once dirname(__FILE__).'/includes/Integrations/LoadLegacy.php';
 
-    register_activation_hook( __FILE__, 'ninja_forms_activation_deprecated' );
-
-    function ninja_forms_activation_deprecated( $network_wide ){
-        include_once 'deprecated/includes/activation.php';
-
-        ninja_forms_activation( $network_wide );
-    }
-
+    $legacyLoader = new NF_LoadLegacy();
+    
+    add_action('plugins_loaded',array($legacyLoader,'handle'));
+    
 } else {
 
     include_once 'lib/NF_Upgrade.php';
@@ -59,7 +55,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
          * @since 3.0
          */
 
-        const VERSION = '3.4.33';
+        const VERSION = '3.6.9';
         
         /**
          * @since 3.4.0
@@ -180,6 +176,11 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
         public $tracking;
 
         /**
+         *
+         * @var NF_Handlers_FieldsetRepeater
+         */
+        public $fieldsetRepeater;
+        /**
          * Plugin Settings
          *
          * @since 3.0
@@ -271,6 +272,11 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
                 spl_autoload_register( array( self::$instance, 'autoloader' ) );
 
                 /*
+                 * Plugin Settings
+                 */
+                self::$instance->settings = apply_filters( 'ninja_forms_settings', get_option( 'ninja_forms_settings' ) );
+
+                /*
                  * Admin Menus
                  */
                 self::$instance->menus[ 'forms' ]           = new NF_Admin_Menus_Forms();
@@ -304,6 +310,11 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
                  */
                 self::$instance->controllers[ 'REST' ][ 'forms' ] = new NF_AJAX_REST_Forms();
                 self::$instance->controllers[ 'REST' ][ 'new-form-templates' ] = new NF_AJAX_REST_NewFormTemplates();
+
+                /*
+                *   API Routes
+                */
+                self::$instance->routes[ 'submissions' ] = new NF_Routes_Submissions();
 
                 /*
                  * Async Requests
@@ -394,11 +405,6 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
                 self::$instance->_eos[ 'parser' ] = require_once 'includes/Libraries/EOS/Parser.php';
 
                 /*
-                 * Plugin Settings
-                 */
-                self::$instance->settings = apply_filters( 'ninja_forms_settings', get_option( 'ninja_forms_settings' ) );
-
-                /*
                  * Admin Notices System
                  */
                 self::$instance->notices = new NF_Admin_Notices();
@@ -410,7 +416,11 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
                  */
                 self::$instance->tracking = new NF_Tracking();
 
-
+                /*
+                 * Fieldset Repeater Handler
+                 */
+                self::$instance->fieldsetRepeater =  new NF_Handlers_FieldsetRepeater();
+                
                 self::$instance->submission_expiration_cron = new NF_Database_SubmissionExpirationCron();
 
                 /*
@@ -950,7 +960,7 @@ if( get_option( 'ninja_forms_load_deprecated', FALSE ) && ! ( isset( $_POST[ 'nf
             $a_order = ( isset( $custom_order[ $a ] ) ) ? $custom_order[ $a ] : 9001;
             $b_order = ( isset( $custom_order[ $b ] ) ) ? $custom_order[ $b ] : 9001;
 
-            return $a_order >= $b_order;
+            return intval( $a_order >= $b_order );
         }
 
         /**

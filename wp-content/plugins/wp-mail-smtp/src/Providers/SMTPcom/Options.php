@@ -23,6 +23,7 @@ class Options extends OptionsAbstract {
 	 * Options constructor.
 	 *
 	 * @since 2.0.0
+	 * @since 2.3.0 Added supports parameter.
 	 */
 	public function __construct() {
 
@@ -38,7 +39,7 @@ class Options extends OptionsAbstract {
 
 		$description  = sprintf(
 			wp_kses( /* translators: %s - URL to smtp.com site. */
-				__( '<strong><a href="%s" target="_blank" rel="noopener noreferrer">SMTP.com</a> is a recommended transactional email service.</strong> With over 22 years of email delivery expertise, SMTP.com has been around for almost as long as email itself. They are known among internet providers as one of the most reliable senders on the internet. Their easy integration process lets you start sending emails in minutes and benefit from years of experience. SMTP.com provides users 10,000 free emails the first 30 days.', 'wp-mail-smtp' ),
+				__( '<strong><a href="%s" target="_blank" rel="noopener noreferrer">SMTP.com</a> is one of our recommended mailers.</strong> It\'s a transactional email provider that\'s currently used by 100,000+ businesses. SMTP.com is an established brand that\'s been offering email services for more than 20 years.<br><br>SMTP.com offers a free 30-day trial that allows you to send up to 50,000 emails.', 'wp-mail-smtp' ),
 				$allowed_kses_html
 			),
 			'https://wpmailsmtp.com/go/smtp/'
@@ -46,7 +47,7 @@ class Options extends OptionsAbstract {
 		$description .= '<br><br>';
 		$description .= sprintf(
 			wp_kses( /* translators: %s - URL to wpmailsmtp.com doc page for stmp.com. */
-				__( 'Read our <a href="%s" target="_blank" rel="noopener noreferrer">SMTP.com documentation</a> to learn how to configure SMTP.com and improve your email deliverability.', 'wp-mail-smtp' ),
+				__( 'To get started, read our <a href="%s" target="_blank" rel="noopener noreferrer">SMTP.com documentation</a>.', 'wp-mail-smtp' ),
 				$allowed_kses_html
 			),
 			'https://wpmailsmtp.com/docs/how-to-set-up-the-smtp-com-mailer-in-wp-mail-smtp'
@@ -60,14 +61,27 @@ class Options extends OptionsAbstract {
 											'</a></p>';
 		}
 
+		$description .= '<p class="wp-mail-smtp-tooltip">' .
+			esc_html__( 'Transparency and Disclosure', 'wp-mail-smtp' ) .
+			'<span class="wp-mail-smtp-tooltip-text">' .
+			esc_html__( 'We believe in full transparency. The SMTP.com links above are tracking links as part of our partnership with SMTP (j2 Global). We can recommend just about any SMTP service, but we only recommend products that we believe will add value to our users.', 'wp-mail-smtp' ) .
+			'</span></p>';
+
 		parent::__construct(
-			array(
+			[
 				'logo_url'    => wp_mail_smtp()->assets_url . '/images/providers/smtp-com.svg',
 				'slug'        => self::SLUG,
 				'title'       => esc_html__( 'SMTP.com', 'wp-mail-smtp' ),
 				'description' => $description,
 				'recommended' => true,
-			)
+				'supports'    => [
+					'from_email'       => true,
+					'from_name'        => true,
+					'return_path'      => false,
+					'from_email_force' => true,
+					'from_name_force'  => true,
+				],
+			]
 		);
 	}
 

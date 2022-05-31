@@ -7,7 +7,7 @@ if (is_home() || is_singular('destinations') || is_month() || is_category() ||  
 
 	<div class="sidebar-item sidebar-item__featured-post">
 		<?php
-		$post_object = get_field('featured_post', options);
+		$post_object = get_field('featured_post', 'options');
 		
 
 		if( $post_object ): 
